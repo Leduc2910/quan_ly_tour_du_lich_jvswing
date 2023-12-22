@@ -10,7 +10,7 @@ public class ConnectToMySQL {
 
     public static Connection getConnection() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (Exception e) {
             return null;
