@@ -4,6 +4,10 @@ public class Role {
     private int id;
     private String role_name;
 
+    public Role() {
+        this.id = 3;
+    }
+
     public Role(int id, String role_name) {
         this.id = id;
         this.role_name = role_name;

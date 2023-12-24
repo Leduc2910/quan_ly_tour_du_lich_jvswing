@@ -13,6 +13,22 @@ import java.util.List;
 public class UserService implements IService<User> {
     private Connection connection = ConnectToMySQL.getConnection();
 
+    public boolean checkAccAlreadyByUsername(String username) {
+        for (User u : findAll()) {
+            if (u.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean checkAccAlreadyByEmail(String email) {
+        for (User u : findAll()) {
+            if (u.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public User getUserByAccount(String username, String password) {
         for (User u : findAll()) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {

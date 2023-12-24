@@ -35,7 +35,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'Nhân viên'),(2,'Quản trị viên');
+INSERT INTO `role` VALUES (1,'Nhân viên'),(2,'Quản trị viên'),(3,'Chờ xét duyệt');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,7 +55,7 @@ CREATE TABLE `user` (
   `gender` int DEFAULT NULL,
   `phone` varchar(50) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
-  `role_id` int NOT NULL,
+  `role_id` int default 3,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uidx_uEmail` (`email`),
   UNIQUE KEY `uidx_aUsername` (`username`),

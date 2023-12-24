@@ -33,7 +33,13 @@ public class User {
         this.email = email;
         this.role = role;
     }
-
+    public User( String username, String password, String fullName,String email, Role role) {
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.role = role;
+    }
     public int getId() {
         return id;
     }
@@ -120,5 +126,6 @@ public class User {
                 ", role=" + role +
                 '}';
     }
+
 }
 

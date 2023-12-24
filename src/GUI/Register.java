@@ -1,41 +1,43 @@
 package GUI;
 
-import com.mysql.cj.log.Log;
-import controller.LoginController;
+import controller.RegisterController;
+import model.Role;
 import model.User;
 import service.UserService;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
-public class Login extends JFrame {
-    private JPanel containTitle, containUsername, containPassword, containLogin, containButton;
-    private JLabel lbTitle, lbTitle2, lbUsername, lbPassword;
-    private JTextField tfUsername;
+public class Register extends JFrame {
+    private JPanel containTitle, containUsername, containPassword, containRegis, containButton, containName, containEmail;
+    private JLabel lbTitle, lbTitle2, lbUsername, lbPassword, lbFullName, lbEmail;
+    private JTextField tfUsername, tfFullName, tfEmail;
     private JPasswordField pfPassword;
-    private JButton lgButton, jbHidPass, jbShowPass, rgButton;
+    private JButton rgButton, jbHidPass, jbShowPass, lgButton;
 
     private UserService userService = new UserService();
 
-    public Login() {
+    public Register() {
         this.init();
     }
 
-    public Login(JButton jbHidPass, JButton jbShowPass, JButton lgButton, JButton rgButton) {
+    public Register(JButton rgButton, JButton jbHidPass, JButton jbShowPass, JButton lgButton) {
+        this.rgButton = rgButton;
         this.jbHidPass = jbHidPass;
         this.jbShowPass = jbShowPass;
         this.lgButton = lgButton;
+    }
+
+    public JButton getRgButton() {
+        return rgButton;
+    }
+
+    public void setRgButton(JButton rgButton) {
         this.rgButton = rgButton;
-    }
-
-    public JButton getLgButton() {
-        return lgButton;
-    }
-
-    public void setLgButton(JButton lgButton) {
-        this.lgButton = lgButton;
     }
 
     public JButton getJbHidPass() {
@@ -54,28 +56,27 @@ public class Login extends JFrame {
         this.jbShowPass = jbShowPass;
     }
 
-    public JButton getRgButton() {
-        return rgButton;
+    public JButton getLgButton() {
+        return lgButton;
     }
 
-    public void setRgButton(JButton rgButton) {
-        this.rgButton = rgButton;
+    public void setLgButton(JButton lgButton) {
+        this.lgButton = lgButton;
     }
 
     private void init() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Đăng nhập");
-        setSize(500, 448);
+        setTitle("Đăng kí");
+        setSize(500, 500);
         setLocationRelativeTo(null);
         setResizable(false);
-
         getContentPane().setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
-        ActionListener actionListener = new LoginController(this);
+        ActionListener actionListener = new RegisterController(this);
 
         containTitle = new JPanel();
-        containTitle.setBorder(BorderFactory.createEmptyBorder(37, 0, 0, 0));
+        containTitle.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
         containTitle.setBackground(Color.WHITE);
         containTitle.setLayout(new BorderLayout());
         add(containTitle, BorderLayout.NORTH);
@@ -93,16 +94,16 @@ public class Login extends JFrame {
         lbTitle2.setHorizontalAlignment(JLabel.CENTER);
         containTitle.add(lbTitle2, BorderLayout.CENTER);
 
-        containLogin = new JPanel();
-        containLogin.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 37));
-        containLogin.setBackground(Color.WHITE);
-        add(containLogin, BorderLayout.CENTER);
+        containRegis = new JPanel();
+        containRegis.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        containRegis.setBackground(Color.WHITE);
+        add(containRegis, BorderLayout.CENTER);
 
         containUsername = new JPanel();
         containUsername.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         containUsername.setBackground(new Color(231, 239, 253));
         containUsername.setPreferredSize(new Dimension(368, 39));
-        containLogin.add(containUsername);
+        containRegis.add(containUsername);
 
         ImageIcon userIcon = new ImageIcon(getClass().getResource("/image/user.png"));
         Icon icon = new ImageIcon(scaleSize(userIcon.getImage(), 19, 19));
@@ -121,7 +122,7 @@ public class Login extends JFrame {
         containPassword.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         containPassword.setBackground(new Color(231, 239, 253));
         containPassword.setPreferredSize(new Dimension(368, 39));
-        containLogin.add(containPassword);
+        containRegis.add(containPassword);
 
         ImageIcon passIcon = new ImageIcon(getClass().getResource("/image/lock.png"));
         icon = new ImageIcon(scaleSize(passIcon.getImage(), 19, 19));
@@ -144,38 +145,74 @@ public class Login extends JFrame {
         jbHidPass.setFocusPainted(false);
         containPassword.add(jbHidPass);
 
+        containName = new JPanel();
+        containName.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        containName.setBackground(new Color(231, 239, 253));
+        containName.setPreferredSize(new Dimension(368, 39));
+        containRegis.add(containName);
+
+        ImageIcon nameIcon = new ImageIcon(getClass().getResource("/image/fullname.png"));
+        icon = new ImageIcon(scaleSize(nameIcon.getImage(), 19, 19));
+        lbFullName = new JLabel(icon);
+        containName.add(lbFullName);
+
+        tfFullName = new JTextField();
+        tfFullName.setFont(new Font("Inter", Font.PLAIN, 14));
+        tfFullName.setBackground(new Color(231, 239, 253));
+        tfFullName.setColumns(27);
+        tfFullName.setBorder(null);
+        containName.add(tfFullName);
+
+        containEmail = new JPanel();
+        containEmail.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        containEmail.setBackground(new Color(231, 239, 253));
+        containEmail.setPreferredSize(new Dimension(368, 39));
+        containRegis.add(containEmail);
+
+        ImageIcon emailIcon = new ImageIcon(getClass().getResource("/image/email.png"));
+        icon = new ImageIcon(scaleSize(emailIcon.getImage(), 19, 19));
+        lbEmail = new JLabel(icon);
+        containEmail.add(lbEmail);
+
+        tfEmail = new JTextField();
+        tfEmail.setFont(new Font("Inter", Font.PLAIN, 14));
+        tfEmail.setBackground(new Color(231, 239, 253));
+        tfEmail.setColumns(27);
+        tfEmail.setBorder(null);
+        containEmail.add(tfEmail);
+
         containButton = new JPanel();
         containButton.setLayout(new FlowLayout());
         containButton.setBackground(Color.WHITE);
         containButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 50, 0));
         add(containButton, BorderLayout.SOUTH);
 
-        lgButton = new JButton("Đăng nhập");
-        lgButton.addActionListener(actionListener);
-        lgButton.addMouseListener(new MouseAdapter() {
+        rgButton = new JButton("Đăng ký");
+        rgButton.addActionListener(actionListener);
+        rgButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                btnLoginPerformed(e);
+                btnRegisterForm(e);
             }
         });
 
-        lgButton.setBackground(new Color(97, 96, 220));
-        lgButton.setPreferredSize(new Dimension(368, 39));
-        lgButton.setForeground(Color.WHITE);
-        lgButton.setBorderPainted(false);
-        lgButton.setFocusPainted(false);
-        UIManager.put("Button.select", new Color(79, 78, 236));
-        containButton.add(lgButton);
-
-        rgButton = new JButton("Đăng kí");
-        rgButton.addActionListener(actionListener);
+        rgButton.setBackground(new Color(97, 96, 220));
         rgButton.setFont(new Font("Dialog", Font.BOLD, 13));
         rgButton.setPreferredSize(new Dimension(368, 39));
+        rgButton.setForeground(Color.WHITE);
         rgButton.setBorderPainted(false);
-        rgButton.setContentAreaFilled(false);
         rgButton.setFocusPainted(false);
+        UIManager.put("Button.select", new Color(79, 78, 236));
         containButton.add(rgButton);
 
+        lgButton = new JButton("Đăng nhập");
+        lgButton.addActionListener(actionListener);
+        lgButton.setFont(new Font("Dialog", Font.BOLD, 13));
+        lgButton.setPreferredSize(new Dimension(368, 39));
+        lgButton.setBorderPainted(false);
+        lgButton.setContentAreaFilled(false);
+        lgButton.setFocusPainted(false);
+        containButton.add(lgButton);
     }
 
     public Image scaleSize(Image image, int w, int h) {
@@ -184,7 +221,7 @@ public class Login extends JFrame {
     }
 
     public void showPass() {
-        ActionListener actionListener = new LoginController(this);
+        ActionListener actionListener = new RegisterController(this);
         ImageIcon showPassIcon = new ImageIcon(getClass().getResource("/image/open-eye.png"));
         Icon icon = new ImageIcon(scaleSize(showPassIcon.getImage(), 19, 19));
         jbShowPass = new JButton(icon);
@@ -204,26 +241,52 @@ public class Login extends JFrame {
         pfPassword.setEchoChar('•');
     }
 
-    public void showFormRegis() {
-        Register register = new Register();
-        register.setVisible(true);
+    public void showFormLogin() {
+        Login login = new Login();
+        login.setVisible(true);
         setVisible(false);
     }
 
-    public void btnLoginPerformed(MouseEvent e) {
+    private void btnRegisterForm(MouseEvent e) {
         String username = tfUsername.getText();
         String password = String.valueOf(pfPassword.getPassword());
-        User user = userService.getUserByAccount(username, password);
+        String fullName = tfFullName.getText();
+        String email = tfEmail.getText();
         String message = "";
-        if (user != null) {
-            message = "Đăng nhập thành công!\nXin chào, " + user.getFullName() + ".";
+
+        if (username.trim().isEmpty()) {
+            message = "Vui lòng nhập tài khoản!";
             JOptionPane.showMessageDialog(null, message);
-            Manager manager = new Manager();
-            manager.setVisible(true);
-            this.setVisible(false);
-        } else {
-            message = "Sai thông tin tài khoản hoặc mật khẩu!";
+            return;
+        } else if (userService.checkAccAlreadyByUsername(username)) {
+            message = "Tài khoản đã tồn tại!";
             JOptionPane.showMessageDialog(null, message);
+            return;
         }
+        if (password.trim().isEmpty()) {
+            message = "Vui lòng nhập mật khẩu!";
+            JOptionPane.showMessageDialog(null, message);
+            return;
+        }
+        if (fullName.trim().isEmpty()) {
+            message = "Vui lòng nhập tên!";
+            JOptionPane.showMessageDialog(null, message);
+            return;
+        }
+        if (email.trim().isEmpty()) {
+            message = "Vui lòng nhập email!";
+            JOptionPane.showMessageDialog(null, message);
+            return;
+        } else if (userService.checkAccAlreadyByEmail(email)) {
+            message = "Email đã tồn tại!";
+            JOptionPane.showMessageDialog(null, message);
+            return;
+        }
+        Role role = new Role();
+        User user = new User(username, password, fullName, email, role);
+        userService.add(user);
+        message = "Đăng ký thành công!";
+        JOptionPane.showMessageDialog(null, message);
+        showFormLogin();
     }
 }
