@@ -2,30 +2,36 @@ package model;
 
 public class User {
     private int id;
+    private String username;
+    private String password;
     private String fullName;
     private String birthday;
     private int gender;
     private String phone;
     private String email;
-    private Account account;
+    private Role role;
 
-    public User(int id, String fullName, String birthday, int gender, String phone, String email, Account account) {
-        this.id = id;
+    public User(String username, String password, String fullName, String birthday, int gender, String phone, String email, Role role) {
+        this.username = username;
+        this.password = password;
         this.fullName = fullName;
         this.birthday = birthday;
         this.gender = gender;
         this.phone = phone;
         this.email = email;
-        this.account = account;
+        this.role = role;
     }
 
-    public User(String fullName, String birthday, int gender, String phone, String email, Account account) {
+    public User(int id, String username, String password, String fullName, String birthday, int gender, String phone, String email, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
         this.fullName = fullName;
         this.birthday = birthday;
         this.gender = gender;
         this.phone = phone;
         this.email = email;
-        this.account = account;
+        this.role = role;
     }
 
     public int getId() {
@@ -34,6 +40,22 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFullName() {
@@ -76,24 +98,27 @@ public class User {
         this.email = email;
     }
 
-    public Account getAccount() {
-        return account;
+    public Role getRole() {
+        return role;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", birthday='" + birthday + '\'' +
                 ", gender=" + gender +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", account=" + account +
+                ", role=" + role +
                 '}';
     }
 }
+
