@@ -105,4 +105,60 @@ public class TourService implements IService<Tour> {
         }
         return list;
     }
+
+    public List<Tour> sortByTourCategory(String name) {
+        List<Tour> list = new ArrayList<>();
+        String sql = "select t.*, c.category_name from tour t join tour_category c on t.cate_id = c.id where c.category_name LIKE '" + name + "' order by id";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String tour_name = resultSet.getString("tour_name");
+                String tour_time = resultSet.getString("tour_time");
+                String start_point = resultSet.getString("start_point");
+                String destination = resultSet.getString("destination");
+                Double price = resultSet.getDouble("price");
+                String schedule = resultSet.getString("schedule");
+                String description = resultSet.getString("description");
+                String image = resultSet.getString("image");
+                int cate_id = resultSet.getInt("cate_id");
+                String cate_name = resultSet.getString("category_name");
+                Tour_category tourCategory = new Tour_category(cate_id, cate_name);
+                Tour tour = new Tour(id, tour_name, tour_time, start_point, destination, price, schedule, description, image, tourCategory);
+                list.add(tour);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
+    public List<Tour> searchByKeyword(String name) {
+        List<Tour> list = new ArrayList<>();
+        String sql = "select t.*, c.category_name from tour t join tour_category c on t.cate_id = c.id where t.tour_name LIKE '%" + name + "%' OR t.schedule LIKE '%" + name + "%' order by id";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String tour_name = resultSet.getString("tour_name");
+                String tour_time = resultSet.getString("tour_time");
+                String start_point = resultSet.getString("start_point");
+                String destination = resultSet.getString("destination");
+                Double price = resultSet.getDouble("price");
+                String schedule = resultSet.getString("schedule");
+                String description = resultSet.getString("description");
+                String image = resultSet.getString("image");
+                int cate_id = resultSet.getInt("cate_id");
+                String cate_name = resultSet.getString("category_name");
+                Tour_category tourCategory = new Tour_category(cate_id, cate_name);
+                Tour tour = new Tour(id, tour_name, tour_time, start_point, destination, price, schedule, description, image, tourCategory);
+                list.add(tour);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
 }

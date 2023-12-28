@@ -4,6 +4,7 @@ import com.mysql.cj.log.Log;
 import controller.LoginController;
 import model.User;
 import service.UserService;
+import validate.ImageValidate;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -105,7 +106,7 @@ public class Login extends JFrame {
         containLogin.add(containUsername);
 
         ImageIcon userIcon = new ImageIcon(getClass().getResource("/image/user.png"));
-        Icon icon = new ImageIcon(scaleSize(userIcon.getImage(), 19, 19));
+        Icon icon = new ImageIcon(ImageValidate.scaleSize(userIcon.getImage(), 19, 19));
         lbUsername = new JLabel(icon);
         containUsername.add(lbUsername);
 
@@ -124,7 +125,7 @@ public class Login extends JFrame {
         containLogin.add(containPassword);
 
         ImageIcon passIcon = new ImageIcon(getClass().getResource("/image/lock.png"));
-        icon = new ImageIcon(scaleSize(passIcon.getImage(), 19, 19));
+        icon = new ImageIcon(ImageValidate.scaleSize(passIcon.getImage(), 19, 19));
         lbPassword = new JLabel(icon);
         containPassword.add(lbPassword);
 
@@ -136,7 +137,7 @@ public class Login extends JFrame {
         containPassword.add(pfPassword);
 
         ImageIcon hidPassIcon = new ImageIcon(getClass().getResource("/image/crossed-eye.png"));
-        icon = new ImageIcon(scaleSize(hidPassIcon.getImage(), 19, 19));
+        icon = new ImageIcon(ImageValidate.scaleSize(hidPassIcon.getImage(), 19, 19));
         jbHidPass = new JButton(icon);
         jbHidPass.addActionListener(actionListener);
         jbHidPass.setBorder(null);
@@ -178,15 +179,10 @@ public class Login extends JFrame {
 
     }
 
-    public Image scaleSize(Image image, int w, int h) {
-        Image scaled = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-        return scaled;
-    }
-
     public void showPass() {
         ActionListener actionListener = new LoginController(this);
         ImageIcon showPassIcon = new ImageIcon(getClass().getResource("/image/open-eye.png"));
-        Icon icon = new ImageIcon(scaleSize(showPassIcon.getImage(), 19, 19));
+        Icon icon = new ImageIcon(ImageValidate.scaleSize(showPassIcon.getImage(), 19, 19));
         jbShowPass = new JButton(icon);
         jbShowPass.addActionListener(actionListener);
         jbShowPass.setBorder(null);

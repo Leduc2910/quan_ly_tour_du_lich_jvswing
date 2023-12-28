@@ -4,6 +4,7 @@ import controller.RegisterController;
 import model.Role;
 import model.User;
 import service.UserService;
+import validate.ImageValidate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,7 +107,7 @@ public class Register extends JFrame {
         containRegis.add(containUsername);
 
         ImageIcon userIcon = new ImageIcon(getClass().getResource("/image/user.png"));
-        Icon icon = new ImageIcon(scaleSize(userIcon.getImage(), 19, 19));
+        Icon icon = new ImageIcon(ImageValidate.scaleSize(userIcon.getImage(), 19, 19));
         lbUsername = new JLabel(icon);
         containUsername.add(lbUsername);
 
@@ -125,7 +126,7 @@ public class Register extends JFrame {
         containRegis.add(containPassword);
 
         ImageIcon passIcon = new ImageIcon(getClass().getResource("/image/lock.png"));
-        icon = new ImageIcon(scaleSize(passIcon.getImage(), 19, 19));
+        icon = new ImageIcon(ImageValidate.scaleSize(passIcon.getImage(), 19, 19));
         lbPassword = new JLabel(icon);
         containPassword.add(lbPassword);
 
@@ -137,7 +138,7 @@ public class Register extends JFrame {
         containPassword.add(pfPassword);
 
         ImageIcon hidPassIcon = new ImageIcon(getClass().getResource("/image/crossed-eye.png"));
-        icon = new ImageIcon(scaleSize(hidPassIcon.getImage(), 19, 19));
+        icon = new ImageIcon(ImageValidate.scaleSize(hidPassIcon.getImage(), 19, 19));
         jbHidPass = new JButton(icon);
         jbHidPass.addActionListener(actionListener);
         jbHidPass.setBorder(null);
@@ -152,7 +153,7 @@ public class Register extends JFrame {
         containRegis.add(containName);
 
         ImageIcon nameIcon = new ImageIcon(getClass().getResource("/image/fullname.png"));
-        icon = new ImageIcon(scaleSize(nameIcon.getImage(), 19, 19));
+        icon = new ImageIcon(ImageValidate.scaleSize(nameIcon.getImage(), 19, 19));
         lbFullName = new JLabel(icon);
         containName.add(lbFullName);
 
@@ -170,7 +171,7 @@ public class Register extends JFrame {
         containRegis.add(containEmail);
 
         ImageIcon emailIcon = new ImageIcon(getClass().getResource("/image/email.png"));
-        icon = new ImageIcon(scaleSize(emailIcon.getImage(), 19, 19));
+        icon = new ImageIcon(ImageValidate.scaleSize(emailIcon.getImage(), 19, 19));
         lbEmail = new JLabel(icon);
         containEmail.add(lbEmail);
 
@@ -215,15 +216,11 @@ public class Register extends JFrame {
         containButton.add(lgButton);
     }
 
-    public Image scaleSize(Image image, int w, int h) {
-        Image scaled = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-        return scaled;
-    }
 
     public void showPass() {
         ActionListener actionListener = new RegisterController(this);
         ImageIcon showPassIcon = new ImageIcon(getClass().getResource("/image/open-eye.png"));
-        Icon icon = new ImageIcon(scaleSize(showPassIcon.getImage(), 19, 19));
+        Icon icon = new ImageIcon(ImageValidate.scaleSize(showPassIcon.getImage(), 19, 19));
         jbShowPass = new JButton(icon);
         jbShowPass.addActionListener(actionListener);
         jbShowPass.setBorder(null);
