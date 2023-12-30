@@ -201,9 +201,9 @@ public class Manager extends JFrame {
         containAvatar.setLayout(null);
         containMenuBar.add(containAvatar);
 
-        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
-        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
-//        Icon icon = ImageValidate.makeRoundedImageIcon("/image/huychien.png", 200, 200, 200);
+//        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
+//        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
+        Icon icon = ImageValidate.makeRoundedImageIcon("/image/huychien.png", 200, 200, 200);
         lbAvatar = new JLabel(icon);
         lbAvatar.setBounds(70, 0, 200, 200);
         containAvatar.add(lbAvatar);
@@ -213,21 +213,12 @@ public class Manager extends JFrame {
         pnlFullName.setBackground(Color.WHITE);
         containAvatar.add(pnlFullName);
 
-/*        lbFullName = new JLabel(CurrentSession.getCurrentUser().getFullName());
-        *//*        lbFullName = new JLabel("Trần Huy Chiến");*//*
+//        String fullname = CurrentSession.getCurrentUser().getFullName();
+        String fullname = "Trần Huy Chiến";
+        JLabel lbFullName = new JLabel(fullname);
         lbFullName.setFont(new Font("Roboto", Font.BOLD, 32));
-        pnlFullName.add(lbFullName);*/
-        String fullName = "Trần Huy Chiến - Một người có tên rất dài để kiểm tra việc xuống dòng"; // Thay thế bằng CurrentSession.getCurrentUser().getFullName()
-
-        JLabel lbFullName = new JLabel("<html>" + fullName + "</html>");
-        lbFullName.setFont(new Font("Roboto", Font.BOLD, 16));
-        lbFullName.setPreferredSize(new Dimension(342, 52));
-        lbFullName.setVerticalAlignment(SwingConstants.TOP); // Căn lề đầu dòng
-        lbFullName.setVerticalTextPosition(SwingConstants.TOP); // Căn lề đầu dòng
-        lbFullName.setLineWrap(true);
-        lbFullName.setWrapStyleWord(true);
+        lbFullName.setFont(getAdjustedFont(lbFullName, fullname, pnlFullName.getSize()));
         pnlFullName.add(lbFullName);
-
 
         containFunction = new JPanel();
         containFunction.setBounds(0, 400, 342, 383);
@@ -307,7 +298,7 @@ public class Manager extends JFrame {
         lbLogout.setForeground(Color.GRAY);
         containLogout.add(lbLogout);
 
-        if (CurrentSession.getCurrentUser().getRole().getId() == 3) {
+/*        if (CurrentSession.getCurrentUser().getRole().getId() == 3) {
             containLogout.setBounds(0, 106, 342, 80);
             managerTourFunction.setVisible(false);
             managerStafffunction.setVisible(false);
@@ -315,7 +306,7 @@ public class Manager extends JFrame {
         if (CurrentSession.getCurrentUser().getRole().getId() == 1) {
             containLogout.setBounds(0, 197, 342, 80);
             managerStafffunction.setVisible(false);
-        }
+        }*/
 
 
         containManager = new PanelRound();
@@ -323,17 +314,33 @@ public class Manager extends JFrame {
         containManager.setLayout(new CardLayout(12, 12));
         containContent.add(containManager, BorderLayout.CENTER);
 
+        accountDetailContent = new AccountDetailContent();
+        containManager.add(accountDetailContent, "accountDetailContent");
+
         tourManagerContent = new TourManagerContent();
         containManager.add(tourManagerContent, "tourManagerContent");
 
         staffManagerContent = new StaffManagerContent();
         containManager.add(staffManagerContent, "staffManagerContent");
-
-        accountDetailContent = new AccountDetailContent();
-        containManager.add(accountDetailContent, "accountDetailContent");
-
     }
+    private static Font getAdjustedFont(JLabel label, String text, Dimension maxSize) {
+        Font originalFont = label.getFont();
+        Font newFont = originalFont;
 
+        // Tạo một đối tượng FontMetrics để lấy kích thước của văn bản
+        FontMetrics fontMetrics = label.getFontMetrics(originalFont);
+
+        // Kiểm tra xem kích thước văn bản có vượt quá kích thước tối đa không
+        while (fontMetrics.stringWidth(text) > maxSize.width ) {
+            int size = newFont.getSize();
+            newFont = new Font(originalFont.getName(), originalFont.getStyle(), size - 1);
+            System.out.println(1);
+            // Cập nhật FontMetrics với Font mới
+            fontMetrics = label.getFontMetrics(newFont);
+        }
+
+        return newFont;
+    }
     public void setActiveFunctionPanle(JPanel panel) {
         Color color = new Color(97, 96, 220);
         lbAccDetail.setForeground((panel == accountDetailContent) ? color : Color.GRAY);
