@@ -50,7 +50,7 @@ public class VehicleService implements IService<Vehicle> {
 
     @Override
     public void delete(int id) {
-        String sql = "delete * from vehicle where id = ?";
+        String sql = "delete from vehicle where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);

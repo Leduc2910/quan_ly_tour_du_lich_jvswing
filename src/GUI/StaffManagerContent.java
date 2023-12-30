@@ -6,23 +6,28 @@ import model.User;
 import service.RoleService;
 import service.UserService;
 import validate.ImageValidate;
+import validate.InputRegex;
 import validate.PanelRound;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class StaffManagerContent extends JPanel {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -43,11 +48,9 @@ public class StaffManagerContent extends JPanel {
     private JLabel lbInRole;
     private JComboBox cbInRole;
     private JLabel lbInGender;
-    /*    private JRadioButton cbInRole;*/
     private JLabel lbInPhone;
     private JTextField tfInPhone;
     private JLabel lbBirthday;
-    /*    private JTextField tfInUsername;*/
     private JLabel lbInEmail;
     private JTextField tfInEmail;
     private JLabel lbInAnh;
@@ -76,8 +79,9 @@ public class StaffManagerContent extends JPanel {
     private JDateChooser jDCBirthday;
     private JComboBox cbFilterGender;
     private JComboBox cbFilterRole;
+    private File selectedImgAvt;
+    private JFileChooser fcAvatar;
 
-    /*    private JTextField tfInUsername;*/
 
     public StaffManagerContent() {
         init();
@@ -123,7 +127,7 @@ public class StaffManagerContent extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 reloadForm();
-                showAllTourList();
+                showAllStaffList();
             }
         });
         containTitle.add(btnIconReload);
@@ -161,7 +165,7 @@ public class StaffManagerContent extends JPanel {
         tfInFullName = new JTextField();
         tfInFullName.setFont(tfFont);
         tfInFullName.setBounds(130, 20, 248, 40);
-        tfInFullName.setBorder(inLineBorder);
+        tfInFullName.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         containInputInfo.add(tfInFullName);
 
         lbInUsername = new JLabel("Tài khoản");
@@ -172,12 +176,13 @@ public class StaffManagerContent extends JPanel {
         tfInUsername = new JTextField();
         tfInUsername.setFont(tfFont);
         tfInUsername.setBounds(130, 85, 248, 40);
-        tfInUsername.setBorder(inLineBorder);
+        tfInUsername.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        tfInUsername.setEditable(false);
         containInputInfo.add(tfInUsername);
 
-        lbInRole = new JLabel("Vai trò");
+        lbInRole = new JLabel("Chức vụ");
         lbInRole.setFont(lbFont);
-        lbInRole.setBounds(30, 155, 66, 30);
+        lbInRole.setBounds(30, 155, 80, 30);
         containInputInfo.add(lbInRole);
 
         cbInRole = new JComboBox();
@@ -220,7 +225,7 @@ public class StaffManagerContent extends JPanel {
         tfInPhone = new JTextField();
         tfInPhone.setFont(tfFont);
         tfInPhone.setBounds(517, 20, 248, 40);
-        tfInPhone.setBorder(inLineBorder);
+        tfInPhone.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         containInputInfo.add(tfInPhone);
 
         lbInFullName = new JLabel("Ngày sinh");
@@ -231,6 +236,7 @@ public class StaffManagerContent extends JPanel {
         jDCBirthday = new JDateChooser();
         jDCBirthday.setBounds(517, 85, 248, 40);
         jDCBirthday.setDateFormatString("dd/MM/yyyy");
+        jDCBirthday.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         containInputInfo.add(jDCBirthday);
 
         lbInEmail = new JLabel("Email");
@@ -240,8 +246,9 @@ public class StaffManagerContent extends JPanel {
 
         tfInEmail = new JTextField();
         tfInEmail.setFont(tfFont);
+        tfInEmail.setEditable(false);
         tfInEmail.setBounds(517, 150, 248, 40);
-        tfInEmail.setBorder(inLineBorder);
+        tfInEmail.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         containInputInfo.add(tfInEmail);
 
         lbInAnh = new JLabel("Ảnh");
@@ -249,12 +256,20 @@ public class StaffManagerContent extends JPanel {
         lbInAnh.setBounds(413, 221, 89, 30);
         containInputInfo.add(lbInAnh);
 
+        fcAvatar = new JFileChooser();
+
         btnFCAvatar = new JButton("Choose file");
         btnFCAvatar.setBounds(517, 220, 100, 30);
         btnFCAvatar.setFont(new Font("Roboto", Font.PLAIN, 13));
         btnFCAvatar.setFocusPainted(false);
         btnFCAvatar.setBackground(new Color(239, 239, 239));
         btnFCAvatar.setBorder(inLineBorder);
+        btnFCAvatar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnFCAvatarActionPerformed(e);
+            }
+        });
         containInputInfo.add(btnFCAvatar);
 
         lbFileName = new JLabel("No file chosen");
@@ -262,11 +277,7 @@ public class StaffManagerContent extends JPanel {
         lbFileName.setFont(new Font("Roboto", Font.PLAIN, 13));
         containInputInfo.add(lbFileName);
 
-        ImageIcon userIcon = new ImageIcon(getClass().getResource("/image/huychien.png"));
-        Image image = new ImageIcon(ImageValidate.scaleSize(userIcon.getImage(), 235, 235)).getImage();
-        Image roundImage = ImageValidate.makeRoundedImage(image, 10);
-        Icon avt = new ImageIcon(roundImage);
-        lbAvatar = new JLabel(avt);
+        lbAvatar = new JLabel();
         lbAvatar.setBounds(795, 20, 235, 235);
         containInputInfo.add(lbAvatar);
 
@@ -275,6 +286,12 @@ public class StaffManagerContent extends JPanel {
         btnEdit.setBackground(new Color(97, 95, 220));
         btnEdit.setFocusPainted(false);
         btnEdit.setForeground(Color.WHITE);
+        btnEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnEditActionPerormed(e);
+            }
+        });
         containInputInfo.add(btnEdit);
 
         btnDelete = new JButton("Xóa");
@@ -282,6 +299,12 @@ public class StaffManagerContent extends JPanel {
         btnDelete.setBackground(new Color(243, 63, 63));
         btnDelete.setFocusPainted(false);
         btnDelete.setForeground(Color.WHITE);
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnDeleteActionPerormed(e);
+            }
+        });
         containInputInfo.add(btnDelete);
 
         containOption = new JPanel();
@@ -331,7 +354,7 @@ public class StaffManagerContent extends JPanel {
         });
         containFilter.add(cbFilterGender);
 
-        lbRoleFilter = new JLabel("Lọc theo vai trò");
+        lbRoleFilter = new JLabel("Lọc theo chức vụ");
         lbRoleFilter.setBounds(402, 24, 152, 30);
         lbRoleFilter.setFont(lbFont);
         containFilter.add(lbRoleFilter);
@@ -343,7 +366,7 @@ public class StaffManagerContent extends JPanel {
         }
         cbFilterRole.setBackground(Color.WHITE);
         cbFilterRole.setFont(tfFont);
-        cbFilterRole.setBounds(547, 19, 180, 40);
+        cbFilterRole.setBounds(560, 19, 180, 40);
         cbFilterRole.setFocusable(false);
         cbFilterRole.addActionListener(new ActionListener() {
             @Override
@@ -398,8 +421,7 @@ public class StaffManagerContent extends JPanel {
         });
         containSearchInput.add(tfSearchInput);
 
-        ImageIcon searchIcon = new ImageIcon(getClass().getResource("/image/search.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(searchIcon.getImage(), 22, 22));
+        icon = ImageValidate.scaleAndCreateIcon("/image/search.png", 22, 22);
         btnSearchReload = new JButton(icon);
         btnSearchReload.setBounds(177, 9, 22, 22);
         btnSearchReload.setBorderPainted(false);
@@ -436,9 +458,9 @@ public class StaffManagerContent extends JPanel {
         tbListStaff.setShowVerticalLines(false);
         tbListStaff.setRowHeight(45);
         tbListStaff.setModel(new DefaultTableModel(new Object[][]{},
-                new String[]{"STT", "Tài khoản", "Tên", "Vai trò", "Điên thoại", "Ngày sinh",
+                new String[]{"STT", "Tài khoản", "Tên", "Chức vụ", "Điên thoại", "Ngày sinh",
                         "Giới tính", "Email"}));
-        showAllTourList();
+        showAllStaffList();
 
         JTableHeader jTableHeader = tbListStaff.getTableHeader();
         jTableHeader.setResizingAllowed(false);
@@ -458,6 +480,106 @@ public class StaffManagerContent extends JPanel {
         columnModel.getColumn(5).setPreferredWidth(100);
         columnModel.getColumn(6).setPreferredWidth(100);
         columnModel.getColumn(7).setPreferredWidth(250);
+
+        tbListStaff.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tbListStaffMouseClicked(e);
+            }
+        });
+
+    }
+
+    private void btnDeleteActionPerormed(ActionEvent e) {
+        if (tbListStaff.getSelectedRow() != -1) {
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
+            int id = (int) defaultTableModel.getValueAt(tbListStaff.getSelectedRow(), 0);
+            int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn xóa nhân viên không?");
+            if (click == JOptionPane.YES_OPTION) {
+                userService.delete(id);
+                reloadForm();
+                showAllStaffList();
+            }
+        }
+    }
+
+
+    private void btnEditActionPerormed(ActionEvent e) {
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
+        if (tbListStaff.getSelectedRow() != -1) {
+            int id = (int) defaultTableModel.getValueAt(tbListStaff.getSelectedRow(), 0);
+            User user = userService.findByID(id);
+
+            String fullname = tfInFullName.getText();
+            String role_name = (String) cbInRole.getSelectedItem();
+            String phone = tfInPhone.getText();
+            String date = (jDCBirthday.getDate() != null) ? dateFormat.format(jDCBirthday.getDate()) : "";
+            String image = lbFileName.getText();
+
+            if (fullname.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập họ tên.");
+            } else if (role_name.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn chức vụ.");
+            } else if (btngrGender.getSelection() == null) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn giới tính.");
+            } else if (phone.trim().isEmpty() || !InputRegex.isPhoneNumber(phone)) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập số điện thoại (0 hoặc +84).");
+            } else if (date.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày sinh.");
+            } else {
+                int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn chỉnh sửa không?");
+                if (click == JOptionPane.YES_OPTION) {
+                    user.setFullName(fullname);
+                    Role role = roleService.findByName(role_name);
+                    user.setRole(role);
+                    user.setGender((rbtnMale.isSelected()) ? 0 : 1);
+                    user.setPhone(phone);
+                    user.setBirthday(date);
+                    user.setImage(image);
+                    userService.edit(id, user);
+                    reloadForm();
+                    showAllStaffList();
+                }
+            }
+        }
+    }
+
+    private void btnFCAvatarActionPerformed(ActionEvent e) {
+        fcAvatar.setDialogTitle("Chọn ảnh đại diện");
+        fcAvatar.setCurrentDirectory(new File(".\\src\\image"));
+        fcAvatar.setFileFilter(new FileNameExtensionFilter("All pics", "png", "jpeg", "jpg"));
+        int res = fcAvatar.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            selectedImgAvt = fcAvatar.getSelectedFile();
+            lbFileName.setText(selectedImgAvt.getName());
+            Icon icon = ImageValidate.makeRoundedImageIcon("/image/" + selectedImgAvt.getName(), 235, 235, 10);
+            lbAvatar.setIcon(icon);
+        }
+
+    }
+
+    private void tbListStaffMouseClicked(MouseEvent e) {
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
+
+        int id = (int) defaultTableModel.getValueAt(tbListStaff.getSelectedRow(), 0);
+        User selectedUser = userService.findByID(id);
+
+        tfInFullName.setText(selectedUser.getFullName());
+        tfInUsername.setText(selectedUser.getUsername());
+        cbInRole.setSelectedItem(selectedUser.getRole().getRole_name());
+        btngrGender.setSelected((selectedUser.getGender() == 1) ? rbtnFemale.getModel() : rbtnMale.getModel(), true);
+        tfInPhone.setText(selectedUser.getPhone());
+        try {
+            Date date = dateFormat.parse(selectedUser.getBirthday());
+            jDCBirthday.setDate(date);
+        } catch (ParseException ex) {
+            throw new RuntimeException(ex);
+        }
+        tfInEmail.setText(selectedUser.getEmail());
+        lbFileName.setText(selectedUser.getImage());
+        String path = "/image/" + selectedUser.getImage();
+        Icon icon = ImageValidate.makeRoundedImageIcon(path, 235, 235, 10);
+        lbAvatar.setIcon(icon);
 
     }
 
@@ -492,7 +614,7 @@ public class StaffManagerContent extends JPanel {
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
         String selected = (String) cbFilterGender.getSelectedItem();
         if (selected.isEmpty()) {
-            showAllTourList();
+            showAllStaffList();
         } else {
             for (User user : userService.findAll()) {
                 if (user.getGender() == 1 && selected.equals("Nữ")) {
@@ -525,7 +647,7 @@ public class StaffManagerContent extends JPanel {
         String selected = (String) cbFilterRole.getSelectedItem();
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
         if (selected.isEmpty()) {
-            showAllTourList();
+            showAllStaffList();
         } else {
             for (User user : userService.findAll()) {
                 if (user.getRole().getRole_name().equals(selected)) {
@@ -558,7 +680,7 @@ public class StaffManagerContent extends JPanel {
         }
     }
 
-    public void showAllTourList() {
+    public void showAllStaffList() {
         deleteOldData();
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
         List<User> userList = userService.findAll();
@@ -587,9 +709,11 @@ public class StaffManagerContent extends JPanel {
         jDCBirthday.setDate(null);
         jDCBirthday.setCalendar(null);
         lbFileName.setText("No file chosen");
+        fcAvatar.setSelectedFile(null);
         lbAvatar.setIcon(null);
         cbFilterGender.setSelectedItem("");
         cbFilterRole.setSelectedItem("");
+        selectedImgAvt = null;
     }
 
     public class MyRenderer extends DefaultTableCellRenderer {
@@ -606,3 +730,4 @@ public class StaffManagerContent extends JPanel {
         }
     }
 }
+

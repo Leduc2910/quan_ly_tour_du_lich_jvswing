@@ -19,6 +19,15 @@ public class RoleService implements IService<Role> {
         return null;
     }
 
+    public Role findByName(String name) {
+        for (Role r : findAll()) {
+            if (r.getRole_name().equals(name)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void add(Role role) {
 

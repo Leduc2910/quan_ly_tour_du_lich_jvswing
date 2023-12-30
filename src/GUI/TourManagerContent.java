@@ -35,7 +35,5 @@ public class TourManagerContent extends JPanel {
         setPreferredSize(new Dimension(1130, 935));
         setBackground(new Color(219, 219, 219));
         setLayout(new BorderLayout());
-
-
     }
 }

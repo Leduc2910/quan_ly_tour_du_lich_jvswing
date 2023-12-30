@@ -1,6 +1,7 @@
 package GUI;
 
 import com.mysql.cj.log.Log;
+import controller.CurrentSession;
 import controller.LoginController;
 import model.User;
 import service.UserService;
@@ -105,8 +106,7 @@ public class Login extends JFrame {
         containUsername.setPreferredSize(new Dimension(368, 39));
         containLogin.add(containUsername);
 
-        ImageIcon userIcon = new ImageIcon(getClass().getResource("/image/user.png"));
-        Icon icon = new ImageIcon(ImageValidate.scaleSize(userIcon.getImage(), 19, 19));
+        Icon icon = ImageValidate.scaleAndCreateIcon("/image/user.png", 19, 19);
         lbUsername = new JLabel(icon);
         containUsername.add(lbUsername);
 
@@ -115,6 +115,7 @@ public class Login extends JFrame {
         tfUsername.setBackground(new Color(231, 239, 253));
         tfUsername.setColumns(27);
         tfUsername.setBorder(null);
+        tfUsername.setToolTipText("Nhập tài khoản");
         containUsername.add(tfUsername);
 
 
@@ -124,8 +125,7 @@ public class Login extends JFrame {
         containPassword.setPreferredSize(new Dimension(368, 39));
         containLogin.add(containPassword);
 
-        ImageIcon passIcon = new ImageIcon(getClass().getResource("/image/lock.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(passIcon.getImage(), 19, 19));
+        icon = ImageValidate.scaleAndCreateIcon("/image/lock.png", 19, 19);
         lbPassword = new JLabel(icon);
         containPassword.add(lbPassword);
 
@@ -134,10 +134,10 @@ public class Login extends JFrame {
         pfPassword.setBackground(new Color(231, 239, 253));
         pfPassword.setColumns(26);
         pfPassword.setBorder(null);
+        pfPassword.setToolTipText("Nhập mật khẩu");
         containPassword.add(pfPassword);
 
-        ImageIcon hidPassIcon = new ImageIcon(getClass().getResource("/image/crossed-eye.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(hidPassIcon.getImage(), 19, 19));
+        icon = ImageValidate.scaleAndCreateIcon("/image/crossed-eye.png", 19, 19);
         jbHidPass = new JButton(icon);
         jbHidPass.addActionListener(actionListener);
         jbHidPass.setBorder(null);
@@ -176,13 +176,11 @@ public class Login extends JFrame {
         rgButton.setContentAreaFilled(false);
         rgButton.setFocusPainted(false);
         containButton.add(rgButton);
-
     }
 
     public void showPass() {
         ActionListener actionListener = new LoginController(this);
-        ImageIcon showPassIcon = new ImageIcon(getClass().getResource("/image/open-eye.png"));
-        Icon icon = new ImageIcon(ImageValidate.scaleSize(showPassIcon.getImage(), 19, 19));
+        Icon icon = ImageValidate.scaleAndCreateIcon("/image/open-eye.png", 19, 19);
         jbShowPass = new JButton(icon);
         jbShowPass.addActionListener(actionListener);
         jbShowPass.setBorder(null);
@@ -209,17 +207,24 @@ public class Login extends JFrame {
     public void btnLoginPerformed(MouseEvent e) {
         String username = tfUsername.getText();
         String password = String.valueOf(pfPassword.getPassword());
-        User user = userService.getUserByAccount(username, password);
-        String message = "";
-        if (user != null) {
-            message = "Đăng nhập thành công!\nXin chào, " + user.getFullName() + ".";
-            JOptionPane.showMessageDialog(null, message);
-            Manager manager = new Manager();
-            manager.setVisible(true);
-            this.setVisible(false);
+        if (username.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập tài khoản");
+        } else if (password.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu");
         } else {
-            message = "Sai thông tin tài khoản hoặc mật khẩu!";
-            JOptionPane.showMessageDialog(null, message);
+            User user = userService.getUserByAccount(username, password);
+            String message = "";
+            if (user != null) {
+                CurrentSession.setCurrentUser(user);
+                message = "Đăng nhập thành công!\nXin chào, " + user.getFullName() + ".";
+                JOptionPane.showMessageDialog(null, message);
+                Manager manager = new Manager();
+                manager.setVisible(true);
+                this.setVisible(false);
+            } else {
+                message = "Sai thông tin tài khoản hoặc mật khẩu!";
+                JOptionPane.showMessageDialog(null, message);
+            }
         }
     }
 }

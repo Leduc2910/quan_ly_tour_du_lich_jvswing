@@ -5,6 +5,7 @@ import model.Role;
 import model.User;
 import service.UserService;
 import validate.ImageValidate;
+import validate.InputRegex;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,8 +107,7 @@ public class Register extends JFrame {
         containUsername.setPreferredSize(new Dimension(368, 39));
         containRegis.add(containUsername);
 
-        ImageIcon userIcon = new ImageIcon(getClass().getResource("/image/user.png"));
-        Icon icon = new ImageIcon(ImageValidate.scaleSize(userIcon.getImage(), 19, 19));
+        Icon icon = ImageValidate.scaleAndCreateIcon("/image/user.png", 19, 19);
         lbUsername = new JLabel(icon);
         containUsername.add(lbUsername);
 
@@ -116,6 +116,7 @@ public class Register extends JFrame {
         tfUsername.setBackground(new Color(231, 239, 253));
         tfUsername.setColumns(27);
         tfUsername.setBorder(null);
+        tfUsername.setToolTipText("Nhập tài khoản");
         containUsername.add(tfUsername);
 
 
@@ -125,8 +126,7 @@ public class Register extends JFrame {
         containPassword.setPreferredSize(new Dimension(368, 39));
         containRegis.add(containPassword);
 
-        ImageIcon passIcon = new ImageIcon(getClass().getResource("/image/lock.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(passIcon.getImage(), 19, 19));
+        icon = ImageValidate.scaleAndCreateIcon("/image/lock.png", 19, 19);
         lbPassword = new JLabel(icon);
         containPassword.add(lbPassword);
 
@@ -135,10 +135,10 @@ public class Register extends JFrame {
         pfPassword.setBackground(new Color(231, 239, 253));
         pfPassword.setColumns(26);
         pfPassword.setBorder(null);
+        pfPassword.setToolTipText("Nhập mật khẩu");
         containPassword.add(pfPassword);
 
-        ImageIcon hidPassIcon = new ImageIcon(getClass().getResource("/image/crossed-eye.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(hidPassIcon.getImage(), 19, 19));
+        icon = ImageValidate.scaleAndCreateIcon("/image/crossed-eye.png", 19, 19);
         jbHidPass = new JButton(icon);
         jbHidPass.addActionListener(actionListener);
         jbHidPass.setBorder(null);
@@ -152,8 +152,7 @@ public class Register extends JFrame {
         containName.setPreferredSize(new Dimension(368, 39));
         containRegis.add(containName);
 
-        ImageIcon nameIcon = new ImageIcon(getClass().getResource("/image/fullname.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(nameIcon.getImage(), 19, 19));
+        icon = ImageValidate.scaleAndCreateIcon("/image/fullname.png", 19, 19);
         lbFullName = new JLabel(icon);
         containName.add(lbFullName);
 
@@ -162,6 +161,7 @@ public class Register extends JFrame {
         tfFullName.setBackground(new Color(231, 239, 253));
         tfFullName.setColumns(27);
         tfFullName.setBorder(null);
+        tfFullName.setToolTipText("Nhập họ và tên");
         containName.add(tfFullName);
 
         containEmail = new JPanel();
@@ -170,8 +170,7 @@ public class Register extends JFrame {
         containEmail.setPreferredSize(new Dimension(368, 39));
         containRegis.add(containEmail);
 
-        ImageIcon emailIcon = new ImageIcon(getClass().getResource("/image/email.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(emailIcon.getImage(), 19, 19));
+        icon = ImageValidate.scaleAndCreateIcon("/image/email.png", 19, 19);
         lbEmail = new JLabel(icon);
         containEmail.add(lbEmail);
 
@@ -180,6 +179,7 @@ public class Register extends JFrame {
         tfEmail.setBackground(new Color(231, 239, 253));
         tfEmail.setColumns(27);
         tfEmail.setBorder(null);
+        tfEmail.setToolTipText("Nhập email");
         containEmail.add(tfEmail);
 
         containButton = new JPanel();
@@ -219,8 +219,7 @@ public class Register extends JFrame {
 
     public void showPass() {
         ActionListener actionListener = new RegisterController(this);
-        ImageIcon showPassIcon = new ImageIcon(getClass().getResource("/image/open-eye.png"));
-        Icon icon = new ImageIcon(ImageValidate.scaleSize(showPassIcon.getImage(), 19, 19));
+        Icon icon = ImageValidate.scaleAndCreateIcon("/image/open-eye.png", 19, 19);
         jbShowPass = new JButton(icon);
         jbShowPass.addActionListener(actionListener);
         jbShowPass.setBorder(null);
@@ -270,8 +269,8 @@ public class Register extends JFrame {
             JOptionPane.showMessageDialog(null, message);
             return;
         }
-        if (email.trim().isEmpty()) {
-            message = "Vui lòng nhập email!";
+        if (email.trim().isEmpty() || !InputRegex.isEmail(email)) {
+            message = "Vui lòng nhập đúng định dạng email!";
             JOptionPane.showMessageDialog(null, message);
             return;
         } else if (userService.checkAccAlreadyByEmail(email)) {

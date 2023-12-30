@@ -1,5 +1,6 @@
 package GUI;
 
+import controller.CurrentSession;
 import controller.ManagerController;
 import model.Tour;
 import model.Tour_category;
@@ -48,6 +49,7 @@ public class Manager extends JFrame {
     private JPanel containLogout;
     private JLabel lbLogout;
     private JLabel lbIconLog;
+    private JPanel pnlFullName;
 
 
     public Manager() {
@@ -55,12 +57,73 @@ public class Manager extends JFrame {
         this.changeForm();
     }
 
-    public Manager(JPanel managerTourFunction, JPanel managerStafffunction, JPanel accountDetailFunction, CardLayout cardLayout, PanelRound containManager, AccountDetailContent accountDetailContent) {
+    public Manager(JPanel containLogout, JPanel managerTourFunction, JPanel managerStafffunction, JPanel accountDetailFunction, CardLayout cardLayout, PanelRound containManager, AccountDetailContent accountDetailContent, JLabel lbAccDetail, JLabel lbTour, JLabel lbUserGear, JLabel lbLogout) {
         this.managerTourFunction = managerTourFunction;
         this.managerStafffunction = managerStafffunction;
         this.accountDetailFunction = accountDetailFunction;
+        this.containLogout = containLogout;
         this.cardLayout = cardLayout;
         this.containManager = containManager;
+        this.lbAccDetail = lbAccDetail;
+        this.lbTour = lbTour;
+        this.lbUserGear = lbUserGear;
+        this.lbLogout = lbLogout;
+    }
+
+    public JPanel getContainLogout() {
+        return containLogout;
+    }
+
+    public TourManagerContent getTourManagerContent() {
+        return tourManagerContent;
+    }
+
+    public void setTourManagerContent(TourManagerContent tourManagerContent) {
+        this.tourManagerContent = tourManagerContent;
+    }
+
+    public StaffManagerContent getStaffManagerContent() {
+        return staffManagerContent;
+    }
+
+    public void setStaffManagerContent(StaffManagerContent staffManagerContent) {
+        this.staffManagerContent = staffManagerContent;
+    }
+
+    public void setContainLogout(JPanel containLogout) {
+        this.containLogout = containLogout;
+    }
+
+    public JLabel getLbTour() {
+        return lbTour;
+    }
+
+    public void setLbTour(JLabel lbTour) {
+        this.lbTour = lbTour;
+    }
+
+    public JLabel getLbUserGear() {
+        return lbUserGear;
+    }
+
+    public void setLbUserGear(JLabel lbUserGear) {
+        this.lbUserGear = lbUserGear;
+    }
+
+    public JLabel getLbAccDetail() {
+        return lbAccDetail;
+    }
+
+    public void setLbAccDetail(JLabel lbAccDetail) {
+        this.lbAccDetail = lbAccDetail;
+    }
+
+    public JLabel getLbLogout() {
+        return lbLogout;
+    }
+
+    public void setLbLogout(JLabel lbLogout) {
+        this.lbLogout = lbLogout;
     }
 
     public JPanel getAccountDetailFunction() {
@@ -133,23 +196,38 @@ public class Manager extends JFrame {
         containContent.add(containMenuBar, BorderLayout.WEST);
 
         containAvatar = new JPanel();
-        containAvatar.setBounds(0, 74, 342, 259);
+        containAvatar.setBounds(0, 74, 342, 270);
         containAvatar.setBackground(Color.WHITE);
         containAvatar.setLayout(null);
         containMenuBar.add(containAvatar);
 
-        ImageIcon userIcon = new ImageIcon(getClass().getResource("/image/huychien.png"));
-        Image image = new ImageIcon(ImageValidate.scaleSize(userIcon.getImage(), 200, 200)).getImage();
-        Image roundImage = ImageValidate.makeRoundedImage(image, 200);
-        Icon avt = new ImageIcon(roundImage);
-        lbAvatar = new JLabel(avt);
+        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
+        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
+//        Icon icon = ImageValidate.makeRoundedImageIcon("/image/huychien.png", 200, 200, 200);
+        lbAvatar = new JLabel(icon);
         lbAvatar.setBounds(70, 0, 200, 200);
         containAvatar.add(lbAvatar);
 
-        lbFullName = new JLabel("Trần Huy Chiến");
-        lbFullName.setBounds(53, 219, 230, 35);
-        lbFullName.setFont(new Font("Roboto", Font.PLAIN, 32));
-        containAvatar.add(lbFullName);
+        pnlFullName = new JPanel();
+        pnlFullName.setBounds(0, 220, 342, 52);
+        pnlFullName.setBackground(Color.WHITE);
+        containAvatar.add(pnlFullName);
+
+/*        lbFullName = new JLabel(CurrentSession.getCurrentUser().getFullName());
+        *//*        lbFullName = new JLabel("Trần Huy Chiến");*//*
+        lbFullName.setFont(new Font("Roboto", Font.BOLD, 32));
+        pnlFullName.add(lbFullName);*/
+        String fullName = "Trần Huy Chiến - Một người có tên rất dài để kiểm tra việc xuống dòng"; // Thay thế bằng CurrentSession.getCurrentUser().getFullName()
+
+        JLabel lbFullName = new JLabel("<html>" + fullName + "</html>");
+        lbFullName.setFont(new Font("Roboto", Font.BOLD, 16));
+        lbFullName.setPreferredSize(new Dimension(342, 52));
+        lbFullName.setVerticalAlignment(SwingConstants.TOP); // Căn lề đầu dòng
+        lbFullName.setVerticalTextPosition(SwingConstants.TOP); // Căn lề đầu dòng
+        lbFullName.setLineWrap(true);
+        lbFullName.setWrapStyleWord(true);
+        pnlFullName.add(lbFullName);
+
 
         containFunction = new JPanel();
         containFunction.setBounds(0, 400, 342, 383);
@@ -164,8 +242,7 @@ public class Manager extends JFrame {
         accountDetailFunction.addMouseListener(mouseListener);
         containFunction.add(accountDetailFunction);
 
-        ImageIcon accountIcon = new ImageIcon(getClass().getResource("/image/user-gear.png"));
-        Icon icon = new ImageIcon(ImageValidate.scaleSize(accountIcon.getImage(), 30, 30));
+        icon = ImageValidate.scaleAndCreateIcon("/image/user-gear.png", 30, 30);
         lbIconAccDetail = new JLabel(icon);
         lbIconAccDetail.setBounds(47, 25, 30, 30);
         accountDetailFunction.add(lbIconAccDetail);
@@ -173,6 +250,7 @@ public class Manager extends JFrame {
         lbAccDetail = new JLabel("Thông tin tài khoản");
         lbAccDetail.setBounds(95, 25, 230, 30);
         lbAccDetail.setFont(new Font("Roboto", Font.PLAIN, 24));
+        lbAccDetail.setForeground(Color.GRAY);
         accountDetailFunction.add(lbAccDetail);
 
         managerTourFunction = new JPanel();
@@ -182,8 +260,7 @@ public class Manager extends JFrame {
         managerTourFunction.addMouseListener(mouseListener);
         containFunction.add(managerTourFunction);
 
-        ImageIcon tourIcon = new ImageIcon(getClass().getResource("/image/tourism.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(tourIcon.getImage(), 30, 30));
+        icon = ImageValidate.scaleAndCreateIcon("/image/tourism.png", 30, 30);
         lbIconTour = new JLabel(icon);
         lbIconTour.setBounds(47, 25, 30, 30);
         managerTourFunction.add(lbIconTour);
@@ -191,6 +268,7 @@ public class Manager extends JFrame {
         lbTour = new JLabel("Quản lý tour");
         lbTour.setBounds(95, 25, 201, 30);
         lbTour.setFont(new Font("Roboto", Font.PLAIN, 24));
+        lbTour.setForeground(Color.GRAY);
         managerTourFunction.add(lbTour);
 
         managerStafffunction = new JPanel();
@@ -200,8 +278,7 @@ public class Manager extends JFrame {
         managerStafffunction.addMouseListener(mouseListener);
         containFunction.add(managerStafffunction);
 
-        ImageIcon staffIcon = new ImageIcon(getClass().getResource("/image/teamwork.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(staffIcon.getImage(), 30, 30));
+        icon = ImageValidate.scaleAndCreateIcon("/image/teamwork.png", 30, 30);
         lbIconUser = new JLabel(icon);
         lbIconUser.setBounds(47, 25, 30, 30);
         managerStafffunction.add(lbIconUser);
@@ -209,16 +286,17 @@ public class Manager extends JFrame {
         lbUserGear = new JLabel("Quản lý nhân viên");
         lbUserGear.setFont(new Font("Roboto", Font.PLAIN, 24));
         lbUserGear.setBounds(95, 25, 201, 30);
+        lbUserGear.setForeground(Color.GRAY);
         managerStafffunction.add(lbUserGear);
 
         containLogout = new JPanel();
         containLogout.setBounds(0, 288, 342, 80);
         containLogout.setLayout(null);
         containLogout.setBackground(Color.WHITE);
+        containLogout.addMouseListener(mouseListener);
         containFunction.add(containLogout);
 
-        ImageIcon logoutIcon = new ImageIcon(getClass().getResource("/image/logout.png"));
-        icon = new ImageIcon(ImageValidate.scaleSize(logoutIcon.getImage(), 30, 30));
+        icon = ImageValidate.scaleAndCreateIcon("/image/logout.png", 30, 30);
         lbIconLog = new JLabel(icon);
         lbIconLog.setBounds(47, 25, 30, 30);
         containLogout.add(lbIconLog);
@@ -226,7 +304,19 @@ public class Manager extends JFrame {
         lbLogout = new JLabel("Đăng xuất");
         lbLogout.setFont(new Font("Roboto", Font.PLAIN, 24));
         lbLogout.setBounds(95, 25, 201, 30);
+        lbLogout.setForeground(Color.GRAY);
         containLogout.add(lbLogout);
+
+        if (CurrentSession.getCurrentUser().getRole().getId() == 3) {
+            containLogout.setBounds(0, 106, 342, 80);
+            managerTourFunction.setVisible(false);
+            managerStafffunction.setVisible(false);
+        }
+        if (CurrentSession.getCurrentUser().getRole().getId() == 1) {
+            containLogout.setBounds(0, 197, 342, 80);
+            managerStafffunction.setVisible(false);
+        }
+
 
         containManager = new PanelRound();
         containManager.setBackground(new Color(219, 219, 219));
@@ -241,6 +331,20 @@ public class Manager extends JFrame {
 
         accountDetailContent = new AccountDetailContent();
         containManager.add(accountDetailContent, "accountDetailContent");
+
+    }
+
+    public void setActiveFunctionPanle(JPanel panel) {
+        Color color = new Color(97, 96, 220);
+        lbAccDetail.setForeground((panel == accountDetailContent) ? color : Color.GRAY);
+        lbTour.setForeground((panel == tourManagerContent) ? color : Color.GRAY);
+        lbUserGear.setForeground((panel == staffManagerContent) ? color : Color.GRAY);
+    }
+    public void logout() {
+        CurrentSession.setCurrentUser(null);
+        Login login = new Login();
+        login.setVisible(true);
+        setVisible(false);
     }
 
     public void changeForm() {

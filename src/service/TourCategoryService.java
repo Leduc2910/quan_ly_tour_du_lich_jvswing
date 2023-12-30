@@ -52,7 +52,7 @@ public class TourCategoryService implements IService<Tour_category> {
 
     @Override
     public void delete(int id) {
-        String sql = "delete * from tour_category where id = ?";
+        String sql = "delete from tour_category where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);

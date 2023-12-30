@@ -67,7 +67,7 @@ public class TourService implements IService<Tour> {
 
     @Override
     public void delete(int id) {
-        String sql = "delete * from tour where id = ?";
+        String sql = "delete from tour where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);

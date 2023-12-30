@@ -53,7 +53,7 @@ public class UserService implements IService<User> {
 
     @Override
     public void add(User user) {
-        String sql = "insert into user(username, password, fullname, birthday, gender, phone, email, role_id) values (?,?,?,?,?,?,?,?);";
+        String sql = "insert into user(username, password, fullname, birthday, gender, phone, email,image, role_id) values (?,?,?,?,?,?,?,?,?);";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getUsername());
@@ -63,7 +63,8 @@ public class UserService implements IService<User> {
             preparedStatement.setInt(5, user.getGender());
             preparedStatement.setString(6, user.getPhone());
             preparedStatement.setString(7, user.getEmail());
-            preparedStatement.setInt(8, user.getRole().getId());
+            preparedStatement.setString(8, user.getImage());
+            preparedStatement.setInt(9, user.getRole().getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -73,7 +74,7 @@ public class UserService implements IService<User> {
 
     @Override
     public void edit(int id, User user) {
-        String sql = "update user set username = ?, password = ?, fullname = ?, birthday = ?, gender = ?, phone = ?, email = ?, role_id = ? where id = ?";
+        String sql = "update user set username = ?, password = ?, fullname = ?, birthday = ?, gender = ?, phone = ?, email = ?,image = ?, role_id = ? where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getUsername());
@@ -83,8 +84,9 @@ public class UserService implements IService<User> {
             preparedStatement.setInt(5, user.getGender());
             preparedStatement.setString(6, user.getPhone());
             preparedStatement.setString(7, user.getEmail());
-            preparedStatement.setInt(8, user.getRole().getId());
-            preparedStatement.setInt(9, id);
+            preparedStatement.setString(8, user.getImage());
+            preparedStatement.setInt(9, user.getRole().getId());
+            preparedStatement.setInt(10, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -94,7 +96,7 @@ public class UserService implements IService<User> {
 
     @Override
     public void delete(int id) {
-        String sql = "delete * from user where id = ?";
+        String sql = "delete from user where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
@@ -120,10 +122,11 @@ public class UserService implements IService<User> {
                 int gender = resultSet.getInt("gender");
                 String phone = resultSet.getString("phone");
                 String email = resultSet.getString("email");
+                String image = resultSet.getString("image");
                 int role_id = resultSet.getInt("role_id");
                 String role_name = resultSet.getString("role_name");
                 Role role = new Role(role_id, role_name);
-                User user = new User(id, username, password, fullName, birthday, gender, phone, email, role);
+                User user = new User(id, username, password, fullName, birthday, gender, phone, email, image, role);
                 userList.add(user);
             }
         } catch (SQLException e) {
@@ -147,10 +150,11 @@ public class UserService implements IService<User> {
                 int gender = resultSet.getInt("gender");
                 String phone = resultSet.getString("phone");
                 String email = resultSet.getString("email");
+                String image = resultSet.getString("image");
                 int role_id = resultSet.getInt("role_id");
                 String role_name = resultSet.getString("role_name");
                 Role role = new Role(role_id, role_name);
-                User user = new User(id, username, password, fullName, birthday, gender, phone, email, role);
+                User user = new User(id, username, password, fullName, birthday, gender, phone, email,image, role);
                 userList.add(user);
             }
         } catch (SQLException e) {
