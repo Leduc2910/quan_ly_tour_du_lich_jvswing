@@ -139,13 +139,14 @@ CREATE TABLE `user` (
   `gender` int DEFAULT NULL,
   `phone` varchar(50) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
+  `image` text,
   `role_id` int DEFAULT '3',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uidx_uEmail` (`email`),
   UNIQUE KEY `uidx_aUsername` (`username`),
   KEY `FK_UserRole` (`role_id`),
   CONSTRAINT `FK_UserRole` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +155,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'duc','1','Lê Minh Đức','01/01/2003',0,'0123456789','duc@gmail.com',2),(2,'phong','1','Bùi Văn Phong','01/01/2003',0,'0987654321','phong@gmail.com',1);
+INSERT INTO `user` VALUES (1,'mihduc','1','Lê Minh Đức','01/01/2003',0,'0123456789','duc@gmail.com','avatar-default.jpg',2),(2,'phongBVB','1','Bùi Văn Phong','01/01/2003',0,'0987654321','phong@gmail.com','avatar-default.jpg',2),(3,'justTuanB','1','Quán Anh Tuấn','01/01/2003',0,'0147852369','tuanquan@gmail.com','avatar-default.jpg',1),(4,'phucman','1','Nguyễn Hoàng Phúc','01/01/2003',0,'0365478921','phucman@gmail.com','avatar-default.jpg',2),(5,'nakadoo','1','Đỗ Năng Khoa','01/01/2003',0,'0569874123','nakado9@gmail.com','avatar-default.jpg',1),(6,'trangngyn','1','Nguyễn Thị Huyền Kiều Trang','01/01/2003',0,'0326587942','trangnguyen@gmail.com','avatar-default.jpg',3);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,4 +191,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-26 20:33:48
+-- Dump completed on 2023-12-29 23:24:11

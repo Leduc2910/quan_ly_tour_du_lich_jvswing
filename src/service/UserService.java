@@ -21,6 +21,7 @@ public class UserService implements IService<User> {
         }
         return false;
     }
+
     public boolean checkAccAlreadyByEmail(String email) {
         for (User u : findAll()) {
             if (u.getEmail().equals(email)) {
@@ -29,6 +30,7 @@ public class UserService implements IService<User> {
         }
         return false;
     }
+
     public User getUserByAccount(String username, String password) {
         for (User u : findAll()) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
@@ -106,6 +108,33 @@ public class UserService implements IService<User> {
     public List<User> findAll() {
         List<User> userList = new ArrayList<>();
         String sql = "select user.*, role.role_name from user join role on user.role_id = role.id order by id";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                String password = resultSet.getString("password");
+                String fullName = resultSet.getString("fullname");
+                String birthday = resultSet.getString("birthday");
+                int gender = resultSet.getInt("gender");
+                String phone = resultSet.getString("phone");
+                String email = resultSet.getString("email");
+                int role_id = resultSet.getInt("role_id");
+                String role_name = resultSet.getString("role_name");
+                Role role = new Role(role_id, role_name);
+                User user = new User(id, username, password, fullName, birthday, gender, phone, email, role);
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userList;
+    }
+
+    public List<User> findByName(String name) {
+        List<User> userList = new ArrayList<>();
+        String sql = "select user.*, role.role_name from user join role on user.role_id = role.id where user.fullname LIKE '%" + name + "%' order by id";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();

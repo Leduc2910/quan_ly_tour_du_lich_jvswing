@@ -1,13 +1,16 @@
 package validate;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 
 public class ImageValidate {
-    public static Image scaleSize(Image image, int w, int h) {
-        Image scaled = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-        return scaled;
+
+    public static Icon scaleAndCreateIcon(String path, int width, int height) {
+        ImageIcon imageIcon = new ImageIcon(ImageValidate.class.getResource(path));
+        Image scaledImage = imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 
     public static Image makeRoundedImage(Image image, int cornerRadius) {
