@@ -4,7 +4,7 @@ import model.User;
 import service.UserService;
 
 public class CurrentSession {
-    private static User currentUser;
+    private static User currentUser = null;
 
     public static User getCurrentUser() {
         return currentUser;

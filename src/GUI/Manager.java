@@ -201,9 +201,9 @@ public class Manager extends JFrame {
         containAvatar.setLayout(null);
         containMenuBar.add(containAvatar);
 
-//        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
-//        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
-        Icon icon = ImageValidate.makeRoundedImageIcon("/image/huychien.png", 200, 200, 200);
+        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
+        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
+//        Icon icon = ImageValidate.makeRoundedImageIcon("/image/huychien.png", 200, 200, 200);
         lbAvatar = new JLabel(icon);
         lbAvatar.setBounds(70, 0, 200, 200);
         containAvatar.add(lbAvatar);
@@ -213,8 +213,7 @@ public class Manager extends JFrame {
         pnlFullName.setBackground(Color.WHITE);
         containAvatar.add(pnlFullName);
 
-//        String fullname = CurrentSession.getCurrentUser().getFullName();
-        String fullname = "Trần Huy Chiến";
+        String fullname = CurrentSession.getCurrentUser().getFullName();
         JLabel lbFullName = new JLabel(fullname);
         lbFullName.setFont(new Font("Roboto", Font.BOLD, 32));
         lbFullName.setFont(getAdjustedFont(lbFullName, fullname, pnlFullName.getSize()));
@@ -251,7 +250,7 @@ public class Manager extends JFrame {
         managerTourFunction.addMouseListener(mouseListener);
         containFunction.add(managerTourFunction);
 
-        icon = ImageValidate.scaleAndCreateIcon("/image/tourism.png", 30, 30);
+        icon = ImageValidate.scaleAndCreateIcon("/image/tour.png", 30, 30);
         lbIconTour = new JLabel(icon);
         lbIconTour.setBounds(47, 25, 30, 30);
         managerTourFunction.add(lbIconTour);
@@ -269,7 +268,7 @@ public class Manager extends JFrame {
         managerStafffunction.addMouseListener(mouseListener);
         containFunction.add(managerStafffunction);
 
-        icon = ImageValidate.scaleAndCreateIcon("/image/teamwork.png", 30, 30);
+        icon = ImageValidate.scaleAndCreateIcon("/image/group.png", 30, 30);
         lbIconUser = new JLabel(icon);
         lbIconUser.setBounds(47, 25, 30, 30);
         managerStafffunction.add(lbIconUser);
@@ -327,15 +326,11 @@ public class Manager extends JFrame {
         Font originalFont = label.getFont();
         Font newFont = originalFont;
 
-        // Tạo một đối tượng FontMetrics để lấy kích thước của văn bản
         FontMetrics fontMetrics = label.getFontMetrics(originalFont);
-
-        // Kiểm tra xem kích thước văn bản có vượt quá kích thước tối đa không
         while (fontMetrics.stringWidth(text) > maxSize.width ) {
             int size = newFont.getSize();
             newFont = new Font(originalFont.getName(), originalFont.getStyle(), size - 1);
             System.out.println(1);
-            // Cập nhật FontMetrics với Font mới
             fontMetrics = label.getFontMetrics(newFont);
         }
 

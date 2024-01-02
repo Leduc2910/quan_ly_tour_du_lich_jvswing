@@ -31,6 +31,8 @@ public class LoginController implements ActionListener {
             login.hidPass();
         } else if (e.getSource() == login.getRgButton()) {
             login.showFormRegis();
+        } else if (e.getSource() == login.getLgButton()) {
+            login.btnLoginPerformed();
         }
     }
 }

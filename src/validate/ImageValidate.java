@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 
 public class ImageValidate {
 
-
     public static Icon scaleAndCreateIcon(String path, int width, int height) {
         ImageIcon imageIcon = new ImageIcon(ImageValidate.class.getResource(path));
         Image scaledImage = imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);

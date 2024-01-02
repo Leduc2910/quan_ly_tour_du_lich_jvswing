@@ -18,12 +18,13 @@ public class Login extends JFrame {
     private JTextField tfUsername;
     private JPasswordField pfPassword;
     private JButton lgButton, jbHidPass, jbShowPass, rgButton;
+ // thuoc tinh
 
     private UserService userService = new UserService();
 
     public Login() {
         this.init();
-    }
+    } // Khoi tao
 
     public Login(JButton jbHidPass, JButton jbShowPass, JButton lgButton, JButton rgButton) {
         this.jbHidPass = jbHidPass;
@@ -65,14 +66,14 @@ public class Login extends JFrame {
     }
 
     private void init() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //  nhấn nút x--> chương trinhf dừng
         setTitle("Đăng nhập");
         setSize(500, 448);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        setLocationRelativeTo(null);// căn giữa tất cả
+        setResizable(false);// cố định kích thước
 
         getContentPane().setBackground(Color.WHITE);
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout());// set bố cục
 
         ActionListener actionListener = new LoginController(this);
 
@@ -82,11 +83,10 @@ public class Login extends JFrame {
         containTitle.setLayout(new BorderLayout());
         add(containTitle, BorderLayout.NORTH);
 
-
         lbTitle = new JLabel("HỆ THỐNG");
-        lbTitle.setFont(new Font("Inter", Font.BOLD, 28));
-        lbTitle.setForeground(new Color(62, 94, 165));
-        lbTitle.setHorizontalAlignment(JLabel.CENTER);
+        lbTitle.setFont(new Font("Inter", Font.BOLD, 28)); // chỉnh font
+        lbTitle.setForeground(new Color(62, 94, 165)); // chỉnh màu chữ
+        lbTitle.setHorizontalAlignment(JLabel.CENTER); // căn theo chiều ngang
         containTitle.add(lbTitle, BorderLayout.NORTH);
 
         lbTitle2 = new JLabel("QUẢN LÝ TOUR DU LỊCH");
@@ -141,8 +141,7 @@ public class Login extends JFrame {
         jbHidPass = new JButton(icon);
         jbHidPass.addActionListener(actionListener);
         jbHidPass.setBorder(null);
-        jbHidPass.setContentAreaFilled(false);
-        jbHidPass.setFocusPainted(false);
+        jbHidPass.setContentAreaFilled(false); // tắt background
         containPassword.add(jbHidPass);
 
         containButton = new JPanel();
@@ -153,18 +152,11 @@ public class Login extends JFrame {
 
         lgButton = new JButton("Đăng nhập");
         lgButton.addActionListener(actionListener);
-        lgButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                btnLoginPerformed(e);
-            }
-        });
-
         lgButton.setBackground(new Color(97, 96, 220));
         lgButton.setPreferredSize(new Dimension(368, 39));
         lgButton.setForeground(Color.WHITE);
-        lgButton.setBorderPainted(false);
-        lgButton.setFocusPainted(false);
+        lgButton.setBorderPainted(false); // tắt hover border
+        lgButton.setFocusPainted(false); // tắt focus border
         UIManager.put("Button.select", new Color(79, 78, 236));
         containButton.add(lgButton);
 
@@ -172,9 +164,9 @@ public class Login extends JFrame {
         rgButton.addActionListener(actionListener);
         rgButton.setFont(new Font("Dialog", Font.BOLD, 13));
         rgButton.setPreferredSize(new Dimension(368, 39));
-        rgButton.setBorderPainted(false);
-        rgButton.setContentAreaFilled(false);
-        rgButton.setFocusPainted(false);
+        rgButton.setBorderPainted(false);  // tắt border
+        rgButton.setContentAreaFilled(false); // tắt background
+        rgButton.setFocusPainted(false); // tắt focus border
         containButton.add(rgButton);
     }
 
@@ -204,7 +196,7 @@ public class Login extends JFrame {
         setVisible(false);
     }
 
-    public void btnLoginPerformed(MouseEvent e) {
+    public void btnLoginPerformed() {
         String username = tfUsername.getText();
         String password = String.valueOf(pfPassword.getPassword());
         if (username.trim().isEmpty()) {

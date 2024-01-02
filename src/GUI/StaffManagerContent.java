@@ -107,7 +107,7 @@ public class StaffManagerContent extends JPanel {
         containTitle.setLayout(null);
         containMain.add(containTitle);
 
-        Icon icon = ImageValidate.scaleAndCreateIcon("/image/teamwork.png", 30, 30);
+        Icon icon = ImageValidate.scaleAndCreateIcon("/image/group.png", 30, 30);
         lbIconTitle = new JLabel(icon);
         lbIconTitle.setBounds(43, 10, 30, 30);
         containTitle.add(lbIconTitle);
@@ -263,7 +263,6 @@ public class StaffManagerContent extends JPanel {
         btnFCAvatar.setFont(new Font("Roboto", Font.PLAIN, 13));
         btnFCAvatar.setFocusPainted(false);
         btnFCAvatar.setBackground(new Color(239, 239, 239));
-        btnFCAvatar.setBorder(inLineBorder);
         btnFCAvatar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -281,7 +280,7 @@ public class StaffManagerContent extends JPanel {
         lbAvatar.setBounds(795, 20, 235, 235);
         containInputInfo.add(lbAvatar);
 
-        btnEdit = new JButton("Cập nhật");
+        btnEdit = new JButton("Lưu");
         btnEdit.setBounds(397, 280, 120, 40);
         btnEdit.setBackground(new Color(97, 95, 220));
         btnEdit.setFocusPainted(false);
