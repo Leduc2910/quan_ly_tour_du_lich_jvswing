@@ -31,6 +31,8 @@ public class RegisterController implements ActionListener {
             register.hidPass();
         } else if (e.getSource() == register.getLgButton()) {
             register.showFormLogin();
+        } else if (e.getSource() == register.getRgButton()) {
+            register.btnRegisterActionPerformed();
         }
     }
 }

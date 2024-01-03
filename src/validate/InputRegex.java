@@ -1,5 +1,8 @@
 package validate;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class InputRegex {
     public static boolean isPhoneNumber(String phone) {
         String regex = "^(0|\\+84)\\d{9}$";
@@ -21,5 +24,9 @@ public class InputRegex {
             return true;
         }
         return false;
+    }
+    public static String formatCurrency(double amount) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return numberFormat.format(amount);
     }
 }

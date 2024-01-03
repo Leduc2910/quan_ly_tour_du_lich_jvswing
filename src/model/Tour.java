@@ -5,34 +5,31 @@ public class Tour {
     private String tour_name;
     private String tour_time;
     private String start_point;
-    private String destination;
     private double price;
     private String schedule;
-    private String description;
+    private String tour_program;
     private String image;
     private Tour_category tourCategory;
 
-    public Tour(String tour_name, String tour_time, String start_point, String destination, double price, String schedule, String description, String image, Tour_category tourCategory) {
+    public Tour(String tour_name, String tour_time, String start_point, double price, String schedule, String tour_program, String image, Tour_category tourCategory) {
         this.tour_name = tour_name;
         this.tour_time = tour_time;
         this.start_point = start_point;
-        this.destination = destination;
         this.price = price;
         this.schedule = schedule;
-        this.description = description;
+        this.tour_program = tour_program;
         this.image = image;
         this.tourCategory = tourCategory;
     }
 
-    public Tour(int id, String tour_name, String tour_time, String start_point, String destination, double price, String schedule, String description, String image, Tour_category tourCategory) {
+    public Tour(int id, String tour_name, String tour_time, String start_point, double price, String schedule, String tour_program, String image, Tour_category tourCategory) {
         this.id = id;
         this.tour_name = tour_name;
         this.tour_time = tour_time;
         this.start_point = start_point;
-        this.destination = destination;
         this.price = price;
         this.schedule = schedule;
-        this.description = description;
+        this.tour_program = tour_program;
         this.image = image;
         this.tourCategory = tourCategory;
     }
@@ -69,13 +66,6 @@ public class Tour {
         this.start_point = start_point;
     }
 
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
 
     public double getPrice() {
         return price;
@@ -93,12 +83,12 @@ public class Tour {
         this.schedule = schedule;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTour_program() {
+        return tour_program;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTour_program(String tour_program) {
+        this.tour_program = tour_program;
     }
 
     public String getImage() {

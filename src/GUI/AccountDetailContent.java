@@ -11,17 +11,20 @@ import validate.PanelRound;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AccountDetailContent extends JPanel {
-    private User user = CurrentSession.getCurrentUser();
+    private Manager manager;
+    private User user;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private PanelRound containMain;
     private JPanel containTitle;
@@ -65,8 +68,10 @@ public class AccountDetailContent extends JPanel {
     private JButton btnSubmit;
     private JButton btnIconClose;
     private UserService userService = new UserService();
+    private File selectedImgAvt;
 
-    public AccountDetailContent() {
+    public AccountDetailContent(Manager manager) {
+        this.manager = manager;
         this.init();
         this.getCurrentAccountInfo();
     }
@@ -107,13 +112,12 @@ public class AccountDetailContent extends JPanel {
         btnIconReload.setBorderPainted(false);
         btnIconReload.setContentAreaFilled(false);
         btnIconReload.setFocusPainted(false);
-/*        btnIconReload.addActionListener(new ActionListener() {
+        btnIconReload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                reloadForm();
-                showAllStaffList();
+                btnReloadActionPerformed(e);
             }
-        });*/
+        });
         containTitle.add(btnIconReload);
 
         lbInfoStaff = new JLabel("Thông tin cá nhân");
@@ -235,12 +239,12 @@ public class AccountDetailContent extends JPanel {
         btnFCAvatar.setFont(new Font("Roboto", Font.PLAIN, 13));
         btnFCAvatar.setFocusPainted(false);
         btnFCAvatar.setBackground(new Color(239, 239, 239));
-/*        btnFCAvatar.addActionListener(new ActionListener() {
+        btnFCAvatar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnFCAvatarActionPerformed(e);
             }
-        });*/
+        });
         containDetailForm.add(btnFCAvatar);
 
         lbFileName = new JLabel("No file chosen");
@@ -278,8 +282,6 @@ public class AccountDetailContent extends JPanel {
             }
         });
         containDetailForm.add(btnEditPass);
-
-        /*        containDetailForm.setVisible(false);*/
 
         lbChangePass = new JLabel("Đổi mật khẩu");
         lbChangePass.setFont(new Font("Roboto", Font.BOLD, 20));
@@ -348,11 +350,67 @@ public class AccountDetailContent extends JPanel {
         btnSubmit.setBackground(new Color(97, 95, 220));
         btnSubmit.setFocusPainted(false);
         btnSubmit.setForeground(Color.WHITE);
+        btnSubmit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnSubmitActionPerformed(e);
+            }
+        });
         containChangePass.add(btnSubmit);
 
         containChangePass.setVisible(false);
         lbChangePass.setVisible(false);
 
+    }
+
+    private void btnReloadActionPerformed(ActionEvent e) {
+        reloadPanel();
+    }
+
+    private void btnSubmitActionPerformed(ActionEvent e) {
+        String oldPass = tfInOldPass.getText();
+        String newPass = tfInNewPass.getText();
+        System.out.println(newPass);
+        String subNewPass = tfInSubNewPass.getText();
+        System.out.println(subNewPass);
+
+        if (oldPass.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu cũ.");
+        } else if (newPass.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu mới.");
+        } else if (subNewPass.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập lại mật khẩu mới.");
+        } else if (!user.getPassword().equals(oldPass)) {
+            JOptionPane.showMessageDialog(null, "Mật khẩu cũ không đúng.");
+        } else if (!subNewPass.equals(newPass)) {
+            JOptionPane.showMessageDialog(null, "Mật khẩu mới không trùng khớp.");
+        } else {
+            int click = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn muốn chỉnh sửa không?");
+            if (click == JOptionPane.YES_OPTION) {
+                user.setPassword(newPass);
+                userService.edit(user.getId(), user);
+                JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công.");
+                containChangePass.setVisible(false);
+                lbChangePass.setVisible(false);
+                containDetailForm.setBounds(43, 131, 1060, 637);
+                lbAvatar.setVisible(true);
+                btnEdit.setBounds(397, 562, 120, 40);
+                btnEditPass.setVisible(true);
+            }
+        }
+    }
+
+    private void btnFCAvatarActionPerformed(ActionEvent e) {
+        fcAvatar.setDialogTitle("Chọn ảnh đại diện");
+        fcAvatar.setCurrentDirectory(new File(".\\src\\image"));
+        fcAvatar.setFileFilter(new FileNameExtensionFilter("All pics", "png", "jpeg", "jpg"));
+        int res = fcAvatar.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            selectedImgAvt = fcAvatar.getSelectedFile();
+            lbFileName.setText(selectedImgAvt.getName());
+            Icon icon = ImageValidate.makeRoundedImageIcon("/image/" + selectedImgAvt.getName(), 307, 307, 10);
+            lbAvatar.setIcon(icon);
+        }
     }
 
     private void btnEditActionPerormed(ActionEvent e) {
@@ -378,13 +436,28 @@ public class AccountDetailContent extends JPanel {
                 user.setBirthday(date);
                 user.setImage(image);
                 userService.edit(user.getId(), user);
-                getCurrentAccountInfo();
                 CurrentSession.setCurrentUser(user);
+                getCurrentAccountInfo();
+                manager.reloadCurrentUser();
             }
         }
     }
 
+    public void reloadPanel() {
+        getCurrentAccountInfo();
+        tfInOldPass.setText("");
+        tfInNewPass.setText("");
+        tfInSubNewPass.setText("");
+        containChangePass.setVisible(false);
+        lbChangePass.setVisible(false);
+        containDetailForm.setBounds(43, 131, 1060, 637);
+        lbAvatar.setVisible(true);
+        btnEdit.setBounds(397, 562, 120, 40);
+        btnEditPass.setVisible(true);
+    }
+
     public void getCurrentAccountInfo() {
+        user = CurrentSession.getCurrentUser();
         tfInFullName.setText(user.getFullName());
         tfInUsername.setText(user.getUsername());
         if (user.getBirthday() == null) {

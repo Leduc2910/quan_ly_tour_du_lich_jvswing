@@ -27,45 +27,6 @@ public class Register extends JFrame {
         this.init();
     }
 
-    public Register(JButton rgButton, JButton jbHidPass, JButton jbShowPass, JButton lgButton) {
-        this.rgButton = rgButton;
-        this.jbHidPass = jbHidPass;
-        this.jbShowPass = jbShowPass;
-        this.lgButton = lgButton;
-    }
-
-    public JButton getRgButton() {
-        return rgButton;
-    }
-
-    public void setRgButton(JButton rgButton) {
-        this.rgButton = rgButton;
-    }
-
-    public JButton getJbHidPass() {
-        return jbHidPass;
-    }
-
-    public void setJbHidPass(JButton jbHidPass) {
-        this.jbHidPass = jbHidPass;
-    }
-
-    public JButton getJbShowPass() {
-        return jbShowPass;
-    }
-
-    public void setJbShowPass(JButton jbShowPass) {
-        this.jbShowPass = jbShowPass;
-    }
-
-    public JButton getLgButton() {
-        return lgButton;
-    }
-
-    public void setLgButton(JButton lgButton) {
-        this.lgButton = lgButton;
-    }
-
     private void init() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Đăng kí");
@@ -190,13 +151,6 @@ public class Register extends JFrame {
 
         rgButton = new JButton("Đăng ký");
         rgButton.addActionListener(actionListener);
-        rgButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                btnRegisterForm(e);
-            }
-        });
-
         rgButton.setBackground(new Color(97, 96, 220));
         rgButton.setFont(new Font("Dialog", Font.BOLD, 13));
         rgButton.setPreferredSize(new Dimension(368, 39));
@@ -243,7 +197,7 @@ public class Register extends JFrame {
         setVisible(false);
     }
 
-    private void btnRegisterForm(MouseEvent e) {
+    public void btnRegisterActionPerformed() {
         String username = tfUsername.getText();
         String password = String.valueOf(pfPassword.getPassword());
         String fullName = tfFullName.getText();
@@ -284,5 +238,37 @@ public class Register extends JFrame {
         message = "Đăng ký thành công!";
         JOptionPane.showMessageDialog(null, message);
         showFormLogin();
+    }
+
+    public JButton getRgButton() {
+        return rgButton;
+    }
+
+    public void setRgButton(JButton rgButton) {
+        this.rgButton = rgButton;
+    }
+
+    public JButton getJbHidPass() {
+        return jbHidPass;
+    }
+
+    public void setJbHidPass(JButton jbHidPass) {
+        this.jbHidPass = jbHidPass;
+    }
+
+    public JButton getJbShowPass() {
+        return jbShowPass;
+    }
+
+    public void setJbShowPass(JButton jbShowPass) {
+        this.jbShowPass = jbShowPass;
+    }
+
+    public JButton getLgButton() {
+        return lgButton;
+    }
+
+    public void setLgButton(JButton lgButton) {
+        this.lgButton = lgButton;
     }
 }

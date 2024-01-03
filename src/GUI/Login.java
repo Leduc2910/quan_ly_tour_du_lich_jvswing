@@ -197,17 +197,17 @@ public class Login extends JFrame {
     }
 
     public void btnLoginPerformed() {
-        String username = tfUsername.getText();
-        String password = String.valueOf(pfPassword.getPassword());
+        String username = tfUsername.getText(); //
+        String password = String.valueOf(pfPassword.getPassword()); // sddsdsd
         if (username.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập tài khoản");
         } else if (password.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu");
         } else {
-            User user = userService.getUserByAccount(username, password);
+            User user = userService.getUserByAccount(username, password); //  kiểm tra du lieu nhap vao xem co trong database khong
             String message = "";
             if (user != null) {
-                CurrentSession.setCurrentUser(user);
+                CurrentSession.setCurrentUser(user); // lay user dang nhap vao he thong
                 message = "Đăng nhập thành công!\nXin chào, " + user.getFullName() + ".";
                 JOptionPane.showMessageDialog(null, message);
                 Manager manager = new Manager();

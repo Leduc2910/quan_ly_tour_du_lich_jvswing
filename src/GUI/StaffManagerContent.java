@@ -1,6 +1,7 @@
 package GUI;
 
 import com.toedter.calendar.JDateChooser;
+import controller.CurrentSession;
 import model.Role;
 import model.User;
 import service.RoleService;
@@ -19,20 +20,16 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
-
 public class StaffManagerContent extends JPanel {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private UserService userService = new UserService();
     private RoleService roleService = new RoleService();
+    private Manager manager;
     private PanelRound containMain;
     private JPanel containTitle;
     private JLabel lbIconTitle;
@@ -83,7 +80,8 @@ public class StaffManagerContent extends JPanel {
     private JFileChooser fcAvatar;
 
 
-    public StaffManagerContent() {
+    public StaffManagerContent(Manager manager) {
+        this.manager = manager;
         init();
     }
 
@@ -126,8 +124,7 @@ public class StaffManagerContent extends JPanel {
         btnIconReload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                reloadForm();
-                showAllStaffList();
+                reloadPanel();
             }
         });
         containTitle.add(btnIconReload);
@@ -288,7 +285,7 @@ public class StaffManagerContent extends JPanel {
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                btnEditActionPerormed(e);
+                btnEditActionPerformed(e);
             }
         });
         containInputInfo.add(btnEdit);
@@ -301,7 +298,7 @@ public class StaffManagerContent extends JPanel {
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                btnDeleteActionPerormed(e);
+                btnDeleteActionPerformed(e);
             }
         });
         containInputInfo.add(btnDelete);
@@ -489,21 +486,25 @@ public class StaffManagerContent extends JPanel {
 
     }
 
-    private void btnDeleteActionPerormed(ActionEvent e) {
+    private void btnDeleteActionPerformed(ActionEvent e) {
         if (tbListStaff.getSelectedRow() != -1) {
             DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
             int id = (int) defaultTableModel.getValueAt(tbListStaff.getSelectedRow(), 0);
-            int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn xóa nhân viên không?");
-            if (click == JOptionPane.YES_OPTION) {
-                userService.delete(id);
-                reloadForm();
-                showAllStaffList();
+            User user = userService.findByID(id);
+            if (user.getUsername().equals(CurrentSession.getCurrentUser().getUsername())) {
+                JOptionPane.showMessageDialog(null, "Bạn không thể xóa tài khoản của bản thân.");
+            } else {
+                int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn xóa nhân viên không?");
+                if (click == JOptionPane.YES_OPTION) {
+                    userService.delete(id);
+                    reloadPanel();
+                }
             }
         }
     }
 
 
-    private void btnEditActionPerormed(ActionEvent e) {
+    private void btnEditActionPerformed(ActionEvent e) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
         if (tbListStaff.getSelectedRow() != -1) {
             int id = (int) defaultTableModel.getValueAt(tbListStaff.getSelectedRow(), 0);
@@ -536,8 +537,12 @@ public class StaffManagerContent extends JPanel {
                     user.setBirthday(date);
                     user.setImage(image);
                     userService.edit(id, user);
-                    reloadForm();
-                    showAllStaffList();
+                    if (CurrentSession.getCurrentUser().getUsername().equals(user.getUsername())) {
+                        CurrentSession.setCurrentUser(user);
+                        manager.reloadCurrentUser();
+                        manager.getAccountDetailContent().reloadPanel();
+                    }
+                    reloadPanel();
                 }
             }
         }
@@ -568,11 +573,15 @@ public class StaffManagerContent extends JPanel {
         cbInRole.setSelectedItem(selectedUser.getRole().getRole_name());
         btngrGender.setSelected((selectedUser.getGender() == 1) ? rbtnFemale.getModel() : rbtnMale.getModel(), true);
         tfInPhone.setText(selectedUser.getPhone());
-        try {
-            Date date = dateFormat.parse(selectedUser.getBirthday());
-            jDCBirthday.setDate(date);
-        } catch (ParseException ex) {
-            throw new RuntimeException(ex);
+        if (selectedUser.getBirthday() == null) {
+            jDCBirthday.setDate(null);
+        } else {
+            try {
+                Date date = dateFormat.parse(selectedUser.getBirthday());
+                jDCBirthday.setDate(date);
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         tfInEmail.setText(selectedUser.getEmail());
         lbFileName.setText(selectedUser.getImage());
@@ -662,6 +671,11 @@ public class StaffManagerContent extends JPanel {
                 }
             }
         }
+    }
+
+    public void reloadPanel() {
+        showAllStaffList();
+        reloadForm();
     }
 
     public void deleteOldData() {

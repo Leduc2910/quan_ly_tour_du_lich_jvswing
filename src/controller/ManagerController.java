@@ -25,9 +25,11 @@ public class ManagerController implements MouseListener {
         } else if (e.getSource() == manager.getManagerStafffunction()) {
             manager.getCardLayout().show(manager.getContainManager(), "staffManagerContent");
             manager.setActiveFunctionPanle(manager.getStaffManagerContent());
+            manager.getStaffManagerContent().reloadPanel();
         } else if (e.getSource() == manager.getAccountDetailFunction()) {
             manager.getCardLayout().show(manager.getContainManager(), "accountDetailContent");
             manager.setActiveFunctionPanle(manager.getAccountDetailContent());
+            manager.getAccountDetailContent().reloadPanel();
         } else if (e.getSource() == manager.getContainLogout()) {
             manager.logout();
         }
@@ -45,7 +47,7 @@ public class ManagerController implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if(e.getSource() == manager.getContainLogout()) {
+        if (e.getSource() == manager.getContainLogout()) {
             manager.getLbLogout().setForeground(new Color(97, 96, 220));
         }
     }

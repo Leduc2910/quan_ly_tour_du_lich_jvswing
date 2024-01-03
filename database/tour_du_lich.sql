@@ -54,7 +54,7 @@ CREATE TABLE `tour` (
   `destination` varchar(255) NOT NULL,
   `price` double DEFAULT '0',
   `schedule` varchar(255) DEFAULT NULL,
-  `description` text,
+  `tour_program` varchar(255) default NULL,
   `image` text,
   `cate_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -146,7 +146,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `uidx_aUsername` (`username`),
   KEY `FK_UserRole` (`role_id`),
   CONSTRAINT `FK_UserRole` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +155,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'mihduc','1','Lê Minh Đức','01/01/2003',0,'0123456789','duc@gmail.com','avatar-default.jpg',2),(2,'phongBVB','1','Bùi Văn Phong','01/01/2003',0,'0987654321','phong@gmail.com','avatar-default.jpg',2),(3,'justTuanB','1','Quán Anh Tuấn','01/01/2003',0,'0147852369','tuanquan@gmail.com','avatar-default.jpg',1),(4,'phucman','1','Nguyễn Hoàng Phúc','01/01/2003',0,'0365478921','phucman@gmail.com','avatar-default.jpg',2),(5,'nakadoo','1','Đỗ Năng Khoa','01/01/2003',0,'0569874123','nakado9@gmail.com','avatar-default.jpg',1),(6,'trangngyn','1','Nguyễn Thị Huyền Kiều Trang','01/01/2003',0,'0326587942','trangnguyen@gmail.com','avatar-default.jpg',3);
+INSERT INTO `user` VALUES (1,'mihduc','2','Lê Minh Đức','29/10/2003',0,'0936759690','mihduc2910@gmail.com','Duc.jpg',2),(2,'phongBVB','11','Bùi Văn Phong','01/01/2003',1,'0987654321','phong@gmail.com','crossed-eye.png',2),(3,'justTuanB','1','Quán Anh Tuấn','01/01/2003',0,'0147852369','tuanquan@gmail.com','avatar-default.jpg',1),(4,'phucman','1','Nguyễn Hoàng Phúc','01/01/2003',1,'0365478921','phucman@gmail.com','avatar-default.jpg',2),(5,'nakadoo','1','Đỗ Năng Khoa','01/01/2003',0,'0569874123','nakado9@gmail.com','avatar-default.jpg',1),(6,'huychin','1','Trần Huy Chiến','09/08/2003',0,'0123456783','huychin@gmail.com','open-eye.png',3);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +170,7 @@ CREATE TABLE `vehicle` (
   `id` int NOT NULL AUTO_INCREMENT,
   `vehicle_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,6 +179,7 @@ CREATE TABLE `vehicle` (
 
 LOCK TABLES `vehicle` WRITE;
 /*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
+INSERT INTO `vehicle` VALUES (1,'Máy bay'),(2,'Ô tô');
 /*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -191,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-29 23:24:11
+-- Dump completed on 2024-01-03 10:59:18

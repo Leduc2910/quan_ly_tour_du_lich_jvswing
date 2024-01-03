@@ -50,6 +50,7 @@ public class Manager extends JFrame {
     private JLabel lbLogout;
     private JLabel lbIconLog;
     private JPanel pnlFullName;
+    private AddTourContent addTourContent;
 
 
     public Manager() {
@@ -68,6 +69,14 @@ public class Manager extends JFrame {
         this.lbTour = lbTour;
         this.lbUserGear = lbUserGear;
         this.lbLogout = lbLogout;
+    }
+
+    public AddTourContent getAddTourContent() {
+        return addTourContent;
+    }
+
+    public void setAddTourContent(AddTourContent addTourContent) {
+        this.addTourContent = addTourContent;
     }
 
     public JPanel getContainLogout() {
@@ -203,7 +212,6 @@ public class Manager extends JFrame {
 
         String path = "/image/" + CurrentSession.getCurrentUser().getImage();
         Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
-//        Icon icon = ImageValidate.makeRoundedImageIcon("/image/huychien.png", 200, 200, 200);
         lbAvatar = new JLabel(icon);
         lbAvatar.setBounds(70, 0, 200, 200);
         containAvatar.add(lbAvatar);
@@ -214,7 +222,7 @@ public class Manager extends JFrame {
         containAvatar.add(pnlFullName);
 
         String fullname = CurrentSession.getCurrentUser().getFullName();
-        JLabel lbFullName = new JLabel(fullname);
+        lbFullName = new JLabel(fullname);
         lbFullName.setFont(new Font("Roboto", Font.BOLD, 32));
         lbFullName.setFont(getAdjustedFont(lbFullName, fullname, pnlFullName.getSize()));
         pnlFullName.add(lbFullName);
@@ -240,7 +248,7 @@ public class Manager extends JFrame {
         lbAccDetail = new JLabel("Thông tin tài khoản");
         lbAccDetail.setBounds(95, 25, 230, 30);
         lbAccDetail.setFont(new Font("Roboto", Font.PLAIN, 24));
-        lbAccDetail.setForeground(Color.GRAY);
+        lbAccDetail.setForeground(new Color(97, 96, 220));
         accountDetailFunction.add(lbAccDetail);
 
         managerTourFunction = new JPanel();
@@ -297,7 +305,7 @@ public class Manager extends JFrame {
         lbLogout.setForeground(Color.GRAY);
         containLogout.add(lbLogout);
 
-/*        if (CurrentSession.getCurrentUser().getRole().getId() == 3) {
+        if (CurrentSession.getCurrentUser().getRole().getId() == 3) {
             containLogout.setBounds(0, 106, 342, 80);
             managerTourFunction.setVisible(false);
             managerStafffunction.setVisible(false);
@@ -305,7 +313,7 @@ public class Manager extends JFrame {
         if (CurrentSession.getCurrentUser().getRole().getId() == 1) {
             containLogout.setBounds(0, 197, 342, 80);
             managerStafffunction.setVisible(false);
-        }*/
+        }
 
 
         containManager = new PanelRound();
@@ -313,35 +321,43 @@ public class Manager extends JFrame {
         containManager.setLayout(new CardLayout(12, 12));
         containContent.add(containManager, BorderLayout.CENTER);
 
-        accountDetailContent = new AccountDetailContent();
+        accountDetailContent = new AccountDetailContent(this);
         containManager.add(accountDetailContent, "accountDetailContent");
 
-        tourManagerContent = new TourManagerContent();
+        tourManagerContent = new TourManagerContent(this);
         containManager.add(tourManagerContent, "tourManagerContent");
 
-        staffManagerContent = new StaffManagerContent();
+        staffManagerContent = new StaffManagerContent(this);
         containManager.add(staffManagerContent, "staffManagerContent");
+
+        addTourContent = new AddTourContent(this);
+        containManager.add(addTourContent, "addTourContent");
     }
+
     private static Font getAdjustedFont(JLabel label, String text, Dimension maxSize) {
         Font originalFont = label.getFont();
         Font newFont = originalFont;
 
         FontMetrics fontMetrics = label.getFontMetrics(originalFont);
-        while (fontMetrics.stringWidth(text) > maxSize.width ) {
-            int size = newFont.getSize();
-            newFont = new Font(originalFont.getName(), originalFont.getStyle(), size - 1);
-            System.out.println(1);
-            fontMetrics = label.getFontMetrics(newFont);
+        if (fontMetrics.stringWidth(text) > maxSize.width) {
+            while (fontMetrics.stringWidth(text) > maxSize.width) {
+                int size = newFont.getSize();
+                newFont = new Font(originalFont.getName(), originalFont.getStyle(), size - 1);
+                fontMetrics = label.getFontMetrics(newFont);
+            }
+        } else {
+            newFont = new Font("Roboto", Font.BOLD, 32);
         }
-
         return newFont;
     }
+
     public void setActiveFunctionPanle(JPanel panel) {
         Color color = new Color(97, 96, 220);
         lbAccDetail.setForeground((panel == accountDetailContent) ? color : Color.GRAY);
         lbTour.setForeground((panel == tourManagerContent) ? color : Color.GRAY);
         lbUserGear.setForeground((panel == staffManagerContent) ? color : Color.GRAY);
     }
+
     public void logout() {
         CurrentSession.setCurrentUser(null);
         Login login = new Login();
@@ -351,6 +367,16 @@ public class Manager extends JFrame {
 
     public void changeForm() {
         cardLayout = (CardLayout) (containManager.getLayout());
+    }
+    public void changeForm(String cardName) {
+        cardLayout.show(containManager, cardName);
+    }
+    public void reloadCurrentUser() {
+        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
+        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
+        lbAvatar.setIcon(icon);
+        lbFullName.setText(CurrentSession.getCurrentUser().getFullName());
+        lbFullName.setFont(getAdjustedFont(lbFullName, CurrentSession.getCurrentUser().getFullName(), pnlFullName.getSize()));
     }
 
     public static void main(String[] args) {
