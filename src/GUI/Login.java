@@ -18,20 +18,11 @@ public class Login extends JFrame {
     private JTextField tfUsername;
     private JPasswordField pfPassword;
     private JButton lgButton, jbHidPass, jbShowPass, rgButton;
- // thuoc tinh
-
     private UserService userService = new UserService();
 
     public Login() {
         this.init();
     } // Khoi tao
-
-    public Login(JButton jbHidPass, JButton jbShowPass, JButton lgButton, JButton rgButton) {
-        this.jbHidPass = jbHidPass;
-        this.jbShowPass = jbShowPass;
-        this.lgButton = lgButton;
-        this.rgButton = rgButton;
-    }
 
     public JButton getLgButton() {
         return lgButton;
@@ -69,7 +60,7 @@ public class Login extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //  nhấn nút x--> chương trinhf dừng
         setTitle("Đăng nhập");
         setSize(500, 448);
-        setLocationRelativeTo(null);// căn giữa tất cả
+        setLocationRelativeTo(null); // can can su ra giua
         setResizable(false);// cố định kích thước
 
         getContentPane().setBackground(Color.WHITE);
@@ -197,26 +188,23 @@ public class Login extends JFrame {
     }
 
     public void btnLoginPerformed() {
-        String username = tfUsername.getText(); //
-        String password = String.valueOf(pfPassword.getPassword()); // sddsdsd
-        if (username.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập tài khoản");
-        } else if (password.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu");
-        } else {
-            User user = userService.getUserByAccount(username, password); //  kiểm tra du lieu nhap vao xem co trong database khong
-            String message = "";
-            if (user != null) {
-                CurrentSession.setCurrentUser(user); // lay user dang nhap vao he thong
-                message = "Đăng nhập thành công!\nXin chào, " + user.getFullName() + ".";
-                JOptionPane.showMessageDialog(null, message);
-                Manager manager = new Manager();
-                manager.setVisible(true);
-                this.setVisible(false);
+            String username = tfUsername.getText(); // 1234
+            String password = String.valueOf(pfPassword.getPassword()); // 123
+            if (username.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập tài khoản");
+            } else if (password.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu");
             } else {
-                message = "Sai thông tin tài khoản hoặc mật khẩu!";
-                JOptionPane.showMessageDialog(null, message);
+                User user = userService.getUserByAccount(username, password);//  kiểm tra du lieu nhap vao xem co trong database khong
+                if (user != null) {
+                    CurrentSession.setCurrentUser(user); // lay user dang nhap vao he thong
+                    JOptionPane.showMessageDialog(null, "Đăng nhập thành công!\nXin chào, " + user.getFullName() + ".");
+                    Manager manager = new Manager();
+                    manager.setVisible(true);
+                    this.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Sai thông tin tài khoản hoặc mật khẩu!");
+                }
             }
-        }
     }
 }

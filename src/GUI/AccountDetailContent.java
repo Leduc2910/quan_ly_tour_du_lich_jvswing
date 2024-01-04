@@ -45,7 +45,7 @@ public class AccountDetailContent extends JPanel {
     private JLabel lbImage;
     private JTextField tfInPhone;
     private JTextField tfInEmail;
-    private JDateChooser jDCBirthday;
+    private JDateChooser jDCBirthday; // tải thử viện ngoài jCalender.jar
     private JRadioButton rbtnMale;
     private JRadioButton rbtnFemale;
     private ButtonGroup btngrGender;
@@ -55,7 +55,6 @@ public class AccountDetailContent extends JPanel {
     private JLabel lbFileName;
     private JLabel lbAvatar;
     private JButton btnEdit;
-    private JButton btnDelete;
     private JLabel lbChangePass;
     private PanelRound containChangePass;
     private JLabel lbOldPass;
@@ -271,10 +270,10 @@ public class AccountDetailContent extends JPanel {
 
         btnEditPass = new JButton("Đổi mật khẩu");
         btnEditPass.setBounds(542, 562, 120, 40);
-        btnEditPass.setBackground(Color.WHITE);
+        btnEditPass.setBackground(new Color(241,241,249));
         btnEditPass.setFocusPainted(false);
         btnEditPass.setForeground(new Color(128, 128, 227));
-        btnEditPass.setBorder(new LineBorder(new Color(128, 128, 227)));
+        btnEditPass.setBorder(new LineBorder(new Color(128, 128, 227),2));
         btnEditPass.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -370,9 +369,7 @@ public class AccountDetailContent extends JPanel {
     private void btnSubmitActionPerformed(ActionEvent e) {
         String oldPass = tfInOldPass.getText();
         String newPass = tfInNewPass.getText();
-        System.out.println(newPass);
         String subNewPass = tfInSubNewPass.getText();
-        System.out.println(subNewPass);
 
         if (oldPass.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu cũ.");
@@ -414,18 +411,16 @@ public class AccountDetailContent extends JPanel {
     }
 
     private void btnEditActionPerormed(ActionEvent e) {
-        String fullname = tfInFullName.getText();
+        String fullname = tfInFullName.getText(); //1
         String date = (jDCBirthday.getDate() != null) ? dateFormat.format(jDCBirthday.getDate()) : "";
         String phone = tfInPhone.getText();
         String image = lbFileName.getText();
 
         if (fullname.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập họ tên.");
-        } else if (btngrGender.getSelection() == null) {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn giới tính.");
-        } else if (phone.trim().isEmpty() || !InputRegex.isPhoneNumber(phone)) {
+        }  else if (phone.trim().isEmpty() || !InputRegex.isPhoneNumber(phone)) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập số điện thoại (0 hoặc +84).");
-        } else if (date.isEmpty() || !InputRegex.isBirthday(date)) {
+        } else if (date.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng ngày sinh.");
         } else {
             int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn chỉnh sửa không?");

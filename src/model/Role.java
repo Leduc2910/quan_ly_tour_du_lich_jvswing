@@ -1,7 +1,7 @@
 package model;
 
 public class Role {
-    private int id;
+    private int id ;
     private String role_name;
 
     public Role() {

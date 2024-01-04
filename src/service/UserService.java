@@ -105,15 +105,14 @@ public class UserService implements IService<User> {
             throw new RuntimeException(e);
         }
     }
-
     @Override
     public List<User> findAll() {
         List<User> userList = new ArrayList<>();
         String sql = "select user.*, role.role_name from user join role on user.role_id = role.id order by id";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            ResultSet resultSet = preparedStatement.executeQuery();  // 1 list user
+            while (resultSet.next()) { // user thư
                 int id = resultSet.getInt("id");
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("password");

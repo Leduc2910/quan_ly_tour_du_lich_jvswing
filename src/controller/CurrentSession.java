@@ -1,8 +1,7 @@
 package controller;
 
 import model.User;
-import service.UserService;
-
+// lấy được người đang đăng nhập hiện tại
 public class CurrentSession {
     private static User currentUser = null;
 
@@ -14,3 +13,4 @@ public class CurrentSession {
         CurrentSession.currentUser = currentUser;
     }
 }
+

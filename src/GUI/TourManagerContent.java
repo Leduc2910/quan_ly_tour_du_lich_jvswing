@@ -10,7 +10,6 @@ import service.TourCategoryService;
 import service.TourService;
 import validate.ImageValidate;
 import validate.InputRegex;
-import validate.InputValidate;
 import validate.PanelRound;
 
 import javax.swing.*;
@@ -19,14 +18,15 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TourManagerContent extends JPanel {
 
     private Manager manager;
     private PanelRound containMain;
-    private JButton testbtn;
     private JPanel containTile;
     private JLabel lbIcoTour;
     private JLabel lbTourTitle;
@@ -40,15 +40,12 @@ public class TourManagerContent extends JPanel {
     private JLabel lbTourCate;
     private JLabel lbTourTime;
     private JLabel lbTourPrice;
-    private JLabel lbTourDes;
     private JLabel lbTourStart;
     private JButton btnDetailTour;
     private JTextField tfTourName;
     private JTextField tfTourSche;
     private JTextField tfTourStart;
-    private JTextField tfTourDes;
     private JTextField tfTourPrice;
-    private JComboBox cbTourCate;
     private TourCategoryService tourCategory = new TourCategoryService();
     private TourService tourService = new TourService();
     private JTextField tfTourDayTime;
@@ -63,6 +60,7 @@ public class TourManagerContent extends JPanel {
     private JButton btnSearchReload;
     private JScrollPane tableScroll;
     private JTable tbListTour;
+    private JTextField tfTourCate;
 
     public TourManagerContent(Manager manager) {
         this.manager = manager;
@@ -144,6 +142,7 @@ public class TourManagerContent extends JPanel {
 
         tfTourName = new JTextField();
         tfTourName.setBounds(155, 20, 340, 40);
+        tfTourName.setEditable(false);
         tfTourName.setBackground(Color.WHITE);
         tfTourName.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
         tfTourName.setFont(tfInput);
@@ -156,6 +155,7 @@ public class TourManagerContent extends JPanel {
 
         tfTourSche = new JTextField();
         tfTourSche.setBounds(155, 85, 880, 40);
+        tfTourSche.setEditable(false);
         tfTourSche.setBackground(Color.WHITE);
         tfTourSche.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
         tfTourSche.setFont(tfInput);
@@ -166,16 +166,13 @@ public class TourManagerContent extends JPanel {
         lbTourCate.setFont(lbInput);
         containInInfo.add(lbTourCate);
 
-        cbTourCate = new JComboBox();
-        cbTourCate.addItem("");
-        for (Tour_category tourCategory : tourCategory.findAll()) {
-            cbTourCate.addItem(tourCategory.getCategory_name());
-        }
-        cbTourCate.setBounds(155, 150, 340, 40);
-        cbTourCate.setBackground(Color.WHITE);
-        cbTourCate.setFocusable(false);
-        cbTourCate.setFont(tfInput);
-        containInInfo.add(cbTourCate);
+        tfTourCate = new JTextField();
+        tfTourCate.setBounds(155, 150, 340, 40);
+        tfTourCate.setEditable(false);
+        tfTourCate.setBackground(Color.WHITE);
+        tfTourCate.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
+        tfTourCate.setFont(tfInput);
+        containInInfo.add(tfTourCate);
 
         lbTourTime = new JLabel("Thời gian");
         lbTourTime.setBounds(30, 220, 110, 30);
@@ -183,6 +180,7 @@ public class TourManagerContent extends JPanel {
         containInInfo.add(lbTourTime);
 
         tfTourDayTime = new JTextField();
+        tfTourDayTime.setEditable(false);
         tfTourDayTime.setBackground(Color.WHITE);
         tfTourDayTime.setBounds(155, 215, 84, 40);
         tfTourDayTime.setFont(tfInput);
@@ -197,6 +195,7 @@ public class TourManagerContent extends JPanel {
         containInInfo.add(lbTourDayTime);
 
         tfTourNightTime = new JTextField();
+        tfTourNightTime.setEditable(false);
         tfTourNightTime.setBackground(Color.WHITE);
         tfTourNightTime.setBounds(335, 215, 84, 40);
         tfTourNightTime.setFont(tfInput);
@@ -217,9 +216,10 @@ public class TourManagerContent extends JPanel {
 
         tfTourStart = new JTextField();
         tfTourStart.setBounds(695, 20, 340, 40);
-        tfTourStart.setBackground(Color.WHITE);
         tfTourStart.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
         tfTourStart.setFont(tfInput);
+        tfTourStart.setEditable(false);
+        tfTourStart.setBackground(Color.WHITE);
         containInInfo.add(tfTourStart);
 
 
@@ -230,22 +230,18 @@ public class TourManagerContent extends JPanel {
 
         tfTourPrice = new JTextField();
         tfTourPrice.setBounds(695, 150, 340, 40);
+        tfTourPrice.setEditable(false);
         tfTourPrice.setBackground(Color.WHITE);
         tfTourPrice.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
+        tfTourPrice.setFont(tfInput);
         containInInfo.add(tfTourPrice);
 
-        btnAddTour = new JButton("Thêm mới");
-        btnAddTour.setBounds(772, 212, 120, 40);
-        btnAddTour.setBackground(new Color(97, 95, 220));
-        btnAddTour.setForeground(Color.WHITE);
-        btnAddTour.setFocusPainted(false);
-        containInInfo.add(btnAddTour);
-
         btnDetailTour = new JButton("Xem chi tiết");
-        btnDetailTour.setBounds(921, 212, 120, 40);
-        btnDetailTour.setBackground(new Color(97, 95, 220));
-        btnDetailTour.setForeground(Color.WHITE);
+        btnDetailTour.setBounds(910, 215, 120, 40);
+        btnDetailTour.setBackground(new Color(241,241,249));
         btnDetailTour.setFocusPainted(false);
+        btnDetailTour.setForeground(new Color(128, 128, 227));
+        btnDetailTour.setBorder(new LineBorder(new Color(128, 128, 227),2));
         containInInfo.add(btnDetailTour);
 
         containOption = new PanelRound();
@@ -258,13 +254,26 @@ public class TourManagerContent extends JPanel {
         containOption.setLayout(null);
         containMain.add(containOption);
 
+        btnAddTour = new JButton("Thêm mới");
+        btnAddTour.setBounds(926, 26, 120, 40);
+        btnAddTour.setBackground(new Color(97, 95, 220));
+        btnAddTour.setForeground(Color.WHITE);
+        btnAddTour.setFocusPainted(false);
+        btnAddTour.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnAddTourActionPerformed(e);
+            }
+        });
+        containOption.add(btnAddTour);
+
         lbFilterTourCate = new JLabel("Loại tour");
         lbFilterTourCate.setFont(tfInput);
-        lbFilterTourCate.setBounds(35, 31, 68, 30);
+        lbFilterTourCate.setBounds(427, 31, 68, 30);
         containOption.add(lbFilterTourCate);
 
         cbFilterTourCate = new JComboBox();
-        cbFilterTourCate.setBounds(123, 26, 209, 40);
+        cbFilterTourCate.setBounds(500, 26, 209, 40);
         cbFilterTourCate.addItem("");
         for (Tour_category tourCategory1 :
                 tourCategory.findAll()) {
@@ -285,7 +294,7 @@ public class TourManagerContent extends JPanel {
         containSearchInput.setRoundTopLeft(20);
         containSearchInput.setRoundBottomRight(20);
         containSearchInput.setRoundTopRight(20);
-        containSearchInput.setBounds(656, 26, 372, 40);
+        containSearchInput.setBounds(30, 26, 372, 40);
         containSearchInput.setBackground(Color.WHITE);
         containSearchInput.setLayout(null);
         containOption.add(containSearchInput);
@@ -321,12 +330,12 @@ public class TourManagerContent extends JPanel {
         btnSearchReload.setBorderPainted(false);
         btnSearchReload.setContentAreaFilled(false);
         btnSearchReload.setFocusPainted(false);
-/*        btnSearchReload.addActionListener(new ActionListener() {
+        btnSearchReload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnSearchActionPerformed(e);
             }
-        });*/
+        });
         containSearchInput.add(btnSearchReload);
 
         tableScroll = new JScrollPane();
@@ -367,6 +376,58 @@ public class TourManagerContent extends JPanel {
         columnModel.getColumn(3).setPreferredWidth(100);
         columnModel.getColumn(4).setPreferredWidth(100);
         columnModel.getColumn(5).setPreferredWidth(100);
+
+        tbListTour.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tbListTourMouseClicked(e);
+            }
+        });
+    }
+
+    private void btnAddTourActionPerformed(ActionEvent e) {
+        manager.changeForm("tourFormContent");
+        manager.getTourFormContent().reloadPanel();
+    }
+
+    private void btnSearchActionPerformed(ActionEvent e) {
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbListTour.getModel();
+        String value = tfSearchInput.getText();
+        if (value.equals("Nhập từ khóa tìm kiếm...") || value.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Nhập để tìm kiếm theo tên.");
+        } else {
+            List<Tour> tourList = tourService.searchByKeyword(value);
+            if (tourList.size() == 0) {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy dữ liệu.");
+            } else {
+                deleteOldData();
+                for (Tour tour : tourList) {
+                    defaultTableModel.addRow(new Object[]{
+                            tour.getId(),
+                            tour.getTour_name() + ": " + tour.getSchedule(),
+                            tour.getTour_time(),
+                            tour.getStart_point(),
+                            tour.getTourCategory().getCategory_name(),
+                            InputRegex.formatCurrency(tour.getPrice())});
+                }
+            }
+        }
+    }
+
+    private void tbListTourMouseClicked(MouseEvent e) {
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tbListTour.getModel();
+
+        int id = (int) defaultTableModel.getValueAt(tbListTour.getSelectedRow(), 0);
+        Tour selectedTour = tourService.findByID(id);
+
+        tfTourName.setText(selectedTour.getTour_name());
+        tfTourPrice.setText(String.valueOf(selectedTour.getPrice()));
+        tfTourCate.setText(selectedTour.getTourCategory().getCategory_name());
+        tfTourSche.setText(selectedTour.getSchedule());
+        tfTourStart.setText(selectedTour.getStart_point());
+        String[] tour_time = selectedTour.getTour_time().split("");
+        tfTourDayTime.setText(tour_time[0]);
+        tfTourNightTime.setText(tour_time[2]);
     }
 
     private void cbFilterTourCateActionPerformed(ActionEvent e) {
@@ -431,7 +492,7 @@ public class TourManagerContent extends JPanel {
         tfTourPrice.setText("");
         tfTourDayTime.setText("");
         tfTourNightTime.setText("");
-        cbTourCate.setSelectedItem("");
+        tfTourCate.setText("");
         cbFilterTourCate.setSelectedItem("");
         tfSearchInput.setText("Nhập từ khóa tìm kiếm...");
         tfSearchInput.setForeground(Color.GRAY);

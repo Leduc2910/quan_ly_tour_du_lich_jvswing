@@ -12,18 +12,6 @@ public class User {
     private String image;
     private Role role;
 
-    public User(String username, String password, String fullName, String birthday, int gender, String phone, String email,String image, Role role) {
-        this.username = username;
-        this.password = password;
-        this.fullName = fullName;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.phone = phone;
-        this.email = email;
-        this.image = image;
-        this.role = role;
-    }
-
     public User(int id, String username, String password, String fullName, String birthday, int gender, String phone, String email,String image, Role role) {
         this.id = id;
         this.username = username;

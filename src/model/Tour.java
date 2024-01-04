@@ -5,13 +5,13 @@ public class Tour {
     private String tour_name;
     private String tour_time;
     private String start_point;
-    private double price;
+    private int price;
     private String schedule;
     private String tour_program;
     private String image;
     private Tour_category tourCategory;
 
-    public Tour(String tour_name, String tour_time, String start_point, double price, String schedule, String tour_program, String image, Tour_category tourCategory) {
+    public Tour(String tour_name, String tour_time, String start_point, int price, String schedule, String tour_program, String image, Tour_category tourCategory) {
         this.tour_name = tour_name;
         this.tour_time = tour_time;
         this.start_point = start_point;
@@ -22,7 +22,7 @@ public class Tour {
         this.tourCategory = tourCategory;
     }
 
-    public Tour(int id, String tour_name, String tour_time, String start_point, double price, String schedule, String tour_program, String image, Tour_category tourCategory) {
+    public Tour(int id, String tour_name, String tour_time, String start_point, int price, String schedule, String tour_program, String image, Tour_category tourCategory) {
         this.id = id;
         this.tour_name = tour_name;
         this.tour_time = tour_time;
@@ -67,11 +67,11 @@ public class Tour {
     }
 
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

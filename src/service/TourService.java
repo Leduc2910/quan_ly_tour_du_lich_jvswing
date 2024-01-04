@@ -32,7 +32,7 @@ public class TourService implements IService<Tour> {
             preparedStatement.setString(1, tour.getTour_name());
             preparedStatement.setString(2, tour.getTour_time());
             preparedStatement.setString(3, tour.getStart_point());
-            preparedStatement.setDouble(4, tour.getPrice());
+            preparedStatement.setInt(4, tour.getPrice());
             preparedStatement.setString(5, tour.getSchedule());
             preparedStatement.setString(6, tour.getTour_program());
             preparedStatement.setString(7, tour.getImage());
@@ -51,7 +51,7 @@ public class TourService implements IService<Tour> {
             preparedStatement.setString(1, tour.getTour_name());
             preparedStatement.setString(2, tour.getTour_time());
             preparedStatement.setString(3, tour.getStart_point());
-            preparedStatement.setDouble(4, tour.getPrice());
+            preparedStatement.setInt(4, tour.getPrice());
             preparedStatement.setString(5, tour.getSchedule());
             preparedStatement.setString(6, tour.getTour_program());
             preparedStatement.setString(7, tour.getImage());
@@ -87,7 +87,7 @@ public class TourService implements IService<Tour> {
                 String tour_name = resultSet.getString("tour_name");
                 String tour_time = resultSet.getString("tour_time");
                 String start_point = resultSet.getString("start_point");
-                Double price = resultSet.getDouble("price");
+                int price = resultSet.getInt("price");
                 String schedule = resultSet.getString("schedule");
                 String tour_program = resultSet.getString("tour_program");
                 String image = resultSet.getString("image");
@@ -114,7 +114,7 @@ public class TourService implements IService<Tour> {
                 String tour_name = resultSet.getString("tour_name");
                 String tour_time = resultSet.getString("tour_time");
                 String start_point = resultSet.getString("start_point");
-                Double price = resultSet.getDouble("price");
+                int price = resultSet.getInt("price");
                 String schedule = resultSet.getString("schedule");
                 String tour_program = resultSet.getString("tour_program");
                 String image = resultSet.getString("image");

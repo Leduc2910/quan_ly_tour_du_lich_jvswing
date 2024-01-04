@@ -28,7 +28,7 @@ public class Register extends JFrame {
     }
 
     private void init() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // khi nhan nut
         setTitle("Đăng kí");
         setSize(500, 500);
         setLocationRelativeTo(null);
@@ -49,7 +49,7 @@ public class Register extends JFrame {
         lbTitle.setFont(new Font("Inter", Font.BOLD, 28));
         lbTitle.setForeground(new Color(62, 94, 165));
         lbTitle.setHorizontalAlignment(JLabel.CENTER);
-        containTitle.add(lbTitle, BorderLayout.NORTH);
+        containTitle.add(lbTitle, BorderLayout.NORTH);  // add vào panel
 
         lbTitle2 = new JLabel("QUẢN LÝ TOUR DU LỊCH");
         lbTitle2.setFont(new Font("Inter", Font.BOLD, 31));
@@ -194,14 +194,14 @@ public class Register extends JFrame {
     public void showFormLogin() {
         Login login = new Login();
         login.setVisible(true);
-        setVisible(false);
+        this.setVisible(false);
     }
 
     public void btnRegisterActionPerformed() {
-        String username = tfUsername.getText();
-        String password = String.valueOf(pfPassword.getPassword());
-        String fullName = tfFullName.getText();
-        String email = tfEmail.getText();
+        String username = tfUsername.getText();  //
+        String password = String.valueOf(pfPassword.getPassword()); // 2
+        String fullName = tfFullName.getText(); // 3
+        String email = tfEmail.getText(); // 4
         String message = "";
 
         if (username.trim().isEmpty()) {

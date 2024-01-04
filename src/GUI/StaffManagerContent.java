@@ -51,7 +51,6 @@ public class StaffManagerContent extends JPanel {
     private JLabel lbInEmail;
     private JTextField tfInEmail;
     private JLabel lbInAnh;
-
     private JLabel lbAvatar;
     private JButton btnEdit;
     private JButton btnDelete;
@@ -225,15 +224,14 @@ public class StaffManagerContent extends JPanel {
         tfInPhone.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         containInputInfo.add(tfInPhone);
 
-        lbInFullName = new JLabel("Ngày sinh");
-        lbInFullName.setFont(lbFont);
-        lbInFullName.setBounds(413, 90, 88, 30);
-        containInputInfo.add(lbInFullName);
+        lbBirthday = new JLabel("Ngày sinh");
+        lbBirthday.setFont(lbFont);
+        lbBirthday.setBounds(413, 90, 88, 30);
+        containInputInfo.add(lbBirthday);
 
         jDCBirthday = new JDateChooser();
         jDCBirthday.setBounds(517, 85, 248, 40);
         jDCBirthday.setDateFormatString("dd/MM/yyyy");
-        jDCBirthday.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         containInputInfo.add(jDCBirthday);
 
         lbInEmail = new JLabel("Email");
@@ -292,9 +290,10 @@ public class StaffManagerContent extends JPanel {
 
         btnDelete = new JButton("Xóa");
         btnDelete.setBounds(542, 280, 120, 40);
-        btnDelete.setBackground(new Color(243, 63, 63));
+        btnDelete.setBackground(new Color(241,241,249));
         btnDelete.setFocusPainted(false);
-        btnDelete.setForeground(Color.WHITE);
+        btnDelete.setForeground(new Color(212, 95, 91));
+        btnDelete.setBorder(new LineBorder(new Color(212, 95, 91),2));
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -342,7 +341,7 @@ public class StaffManagerContent extends JPanel {
         cbFilterGender.setFont(tfFont);
         cbFilterGender.setBounds(192, 19, 180, 40);
         cbFilterGender.setFocusable(false);
-        cbFilterGender.addActionListener(new ActionListener() {
+        cbFilterGender.addActionListener(new ActionListener() { //
             @Override
             public void actionPerformed(ActionEvent e) {
                 cbFilterGenderActionPerformed(e);
@@ -410,8 +409,8 @@ public class StaffManagerContent extends JPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 if (tfSearchInput.getText().isEmpty()) {
-                    tfSearchInput.setForeground(Color.GRAY);
                     tfSearchInput.setText("Nhập ...");
+                    tfSearchInput.setForeground(Color.GRAY);
                 }
             }
         });
@@ -593,7 +592,7 @@ public class StaffManagerContent extends JPanel {
 
     private void btnSearchActionPerformed(ActionEvent e) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
-        String value = tfSearchInput.getText();
+        String value = tfSearchInput.getText(); // lưu trữ cái tên muốn tìm
         if (value.equals("Nhập ...") || value.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nhập để tìm kiếm theo tên.");
         } else {
@@ -617,14 +616,15 @@ public class StaffManagerContent extends JPanel {
         }
     }
 
-    private void cbFilterGenderActionPerformed(ActionEvent e) {
+    private void cbFilterGenderActionPerformed(ActionEvent e) { // lọc theo giới tính
         deleteOldData();
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
-        String selected = (String) cbFilterGender.getSelectedItem();
+        String selected = (String) cbFilterGender.getSelectedItem(); // Nam
         if (selected.isEmpty()) {
             showAllStaffList();
         } else {
-            for (User user : userService.findAll()) {
+            List<User> userList = userService.findAll(); // 8 tài khoản
+            for (User user : userList) {
                 if (user.getGender() == 1 && selected.equals("Nữ")) {
                     defaultTableModel.addRow(new Object[]{
                             user.getId(),
@@ -693,7 +693,7 @@ public class StaffManagerContent extends JPanel {
         }
     }
 
-    public void showAllStaffList() {
+    public void showAllStaffList() { // hiển thị dữ liệu từ CSDL ra tbStaffList
         deleteOldData();
         DefaultTableModel defaultTableModel = (DefaultTableModel) tbListStaff.getModel();
         List<User> userList = userService.findAll();
@@ -710,7 +710,7 @@ public class StaffManagerContent extends JPanel {
         }
     }
 
-    public void reloadForm() {
+    public void reloadForm() { // Reload lại thành form trắng
         tfSearchInput.setText("Nhập ...");
         tfSearchInput.setForeground(Color.GRAY);
         tfInEmail.setText("");

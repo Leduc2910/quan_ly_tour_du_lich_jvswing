@@ -2,28 +2,12 @@ package GUI;
 
 import controller.CurrentSession;
 import controller.ManagerController;
-import model.Tour;
-import model.Tour_category;
-import service.TourCategoryService;
-import service.TourService;
 import validate.ImageValidate;
-import validate.InputValidate;
 import validate.PanelRound;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
 
 public class Manager extends JFrame {
     private JPanel containContent;
@@ -50,7 +34,7 @@ public class Manager extends JFrame {
     private JLabel lbLogout;
     private JLabel lbIconLog;
     private JPanel pnlFullName;
-    private AddTourContent addTourContent;
+    private TourFormContent tourFormContent;
 
 
     public Manager() {
@@ -58,25 +42,12 @@ public class Manager extends JFrame {
         this.changeForm();
     }
 
-    public Manager(JPanel containLogout, JPanel managerTourFunction, JPanel managerStafffunction, JPanel accountDetailFunction, CardLayout cardLayout, PanelRound containManager, AccountDetailContent accountDetailContent, JLabel lbAccDetail, JLabel lbTour, JLabel lbUserGear, JLabel lbLogout) {
-        this.managerTourFunction = managerTourFunction;
-        this.managerStafffunction = managerStafffunction;
-        this.accountDetailFunction = accountDetailFunction;
-        this.containLogout = containLogout;
-        this.cardLayout = cardLayout;
-        this.containManager = containManager;
-        this.lbAccDetail = lbAccDetail;
-        this.lbTour = lbTour;
-        this.lbUserGear = lbUserGear;
-        this.lbLogout = lbLogout;
+    public TourFormContent getTourFormContent() {
+        return tourFormContent;
     }
 
-    public AddTourContent getAddTourContent() {
-        return addTourContent;
-    }
-
-    public void setAddTourContent(AddTourContent addTourContent) {
-        this.addTourContent = addTourContent;
+    public void setTourFormContent(TourFormContent tourFormContent) {
+        this.tourFormContent = tourFormContent;
     }
 
     public JPanel getContainLogout() {
@@ -103,29 +74,6 @@ public class Manager extends JFrame {
         this.containLogout = containLogout;
     }
 
-    public JLabel getLbTour() {
-        return lbTour;
-    }
-
-    public void setLbTour(JLabel lbTour) {
-        this.lbTour = lbTour;
-    }
-
-    public JLabel getLbUserGear() {
-        return lbUserGear;
-    }
-
-    public void setLbUserGear(JLabel lbUserGear) {
-        this.lbUserGear = lbUserGear;
-    }
-
-    public JLabel getLbAccDetail() {
-        return lbAccDetail;
-    }
-
-    public void setLbAccDetail(JLabel lbAccDetail) {
-        this.lbAccDetail = lbAccDetail;
-    }
 
     public JLabel getLbLogout() {
         return lbLogout;
@@ -330,8 +278,8 @@ public class Manager extends JFrame {
         staffManagerContent = new StaffManagerContent(this);
         containManager.add(staffManagerContent, "staffManagerContent");
 
-        addTourContent = new AddTourContent(this);
-        containManager.add(addTourContent, "addTourContent");
+        tourFormContent = new TourFormContent(this);
+        containManager.add(tourFormContent, "tourFormContent");
     }
 
     private static Font getAdjustedFont(JLabel label, String text, Dimension maxSize) {

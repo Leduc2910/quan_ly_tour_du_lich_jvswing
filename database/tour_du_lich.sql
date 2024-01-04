@@ -51,16 +51,15 @@ CREATE TABLE `tour` (
   `tour_name` varchar(255) NOT NULL,
   `tour_time` varchar(255) NOT NULL,
   `start_point` varchar(255) NOT NULL,
-  `destination` varchar(255) NOT NULL,
-  `price` double DEFAULT '0',
+  `price` int DEFAULT '0',
   `schedule` varchar(255) DEFAULT NULL,
-  `tour_program` varchar(255) default NULL,
+  `tour_program` varchar(255) DEFAULT NULL,
   `image` text,
   `cate_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_TourCate` (`cate_id`),
   CONSTRAINT `FK_TourCate` FOREIGN KEY (`cate_id`) REFERENCES `tour_category` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,6 +68,7 @@ CREATE TABLE `tour` (
 
 LOCK TABLES `tour` WRITE;
 /*!40000 ALTER TABLE `tour` DISABLE KEYS */;
+INSERT INTO `tour` VALUES (1,'Tour Hà Giang','5N4Đ','Hồ Chí Minh',24580000,'HCM - Hà Giang - Đồng Văn - Cao Bằng - Bản Giốc - Pác Bó - Ba Bể','null','tour-ha-giang.jpg',1),(2,'Tour Miền Trung','5N4Đ','Đà Nẵng',8000000,'Đà Nẵng - Sơn Trà - Bà Nà - Hội An - Huế - Phong Nha - Bảo Tàng Phật Học - Chùa Quan Thế Âm','null','tour-da-nang.jpg',2),(3,'Tour Du Lịch Thái Lan','5N4Đ','Hà Nội',6290000,'Hà Nội - Bangkok - Pattaya - Muang Boran','null','tour-thai-lan.jpg',4),(4,'Tour Tây Nguyên','3N3Đ','Hồ Chí Minh',4786000,'Hồ Chí Minh - Tây Nguyên - Buôn Ma Thuột - Pleiku','null','tour-buon-me-thuat.jpg',3);
 /*!40000 ALTER TABLE `tour` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,7 +83,7 @@ CREATE TABLE `tour_category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,6 +92,7 @@ CREATE TABLE `tour_category` (
 
 LOCK TABLES `tour_category` WRITE;
 /*!40000 ALTER TABLE `tour_category` DISABLE KEYS */;
+INSERT INTO `tour_category` VALUES (1,'Miền Bắc'),(2,'Miền Trung'),(3,'Miền Nam'),(4,'Nước Ngoài');
 /*!40000 ALTER TABLE `tour_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,7 +147,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `uidx_aUsername` (`username`),
   KEY `FK_UserRole` (`role_id`),
   CONSTRAINT `FK_UserRole` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +156,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'mihduc','2','Lê Minh Đức','29/10/2003',0,'0936759690','mihduc2910@gmail.com','Duc.jpg',2),(2,'phongBVB','11','Bùi Văn Phong','01/01/2003',1,'0987654321','phong@gmail.com','crossed-eye.png',2),(3,'justTuanB','1','Quán Anh Tuấn','01/01/2003',0,'0147852369','tuanquan@gmail.com','avatar-default.jpg',1),(4,'phucman','1','Nguyễn Hoàng Phúc','01/01/2003',1,'0365478921','phucman@gmail.com','avatar-default.jpg',2),(5,'nakadoo','1','Đỗ Năng Khoa','01/01/2003',0,'0569874123','nakado9@gmail.com','avatar-default.jpg',1),(6,'huychin','1','Trần Huy Chiến','09/08/2003',0,'0123456783','huychin@gmail.com','open-eye.png',3);
+INSERT INTO `user` VALUES (1,'mihduc','1','Lê Minh Đức','29/10/2003',0,'0936759690','mihduc2910@gmail.com','avatar-default.jpg',2),(2,'phongBVB','11','Bùi Văn Phong','01/01/2003',1,'0987654321','phong@gmail.com','crossed-eye.png',2),(3,'justTuanB','1','Quán Anh Tuấn','01/01/2003',0,'0147852369','tuanquan@gmail.com','avatar-default.jpg',1),(4,'phucman','1','Nguyễn Hoàng Phúc','01/01/2003',1,'0365478921','phucman@gmail.com','avatar-default.jpg',2),(5,'nakadoo','1','Đỗ Năng Khoa','01/01/2003',0,'0569874123','nakado9@gmail.com','avatar-default.jpg',1),(11,'huyentrang','1','Nguyen Thi Huyen Trang','01/01/2003',0,'0123456789','trangnguyen@gmail.com','avatar-default.jpg',1),(12,'linhtruong','1','Trương Đăng Vũ Linh',NULL,0,NULL,'linhtruong@gmail.com','avatar-default.jpg',3);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,4 +193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-03 10:59:18
+-- Dump completed on 2024-01-03 21:02:17

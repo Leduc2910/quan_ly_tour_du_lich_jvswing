@@ -22,6 +22,7 @@ public class ManagerController implements MouseListener {
         if (e.getSource() == manager.getManagerTourFunction()) {
             manager.getCardLayout().show(manager.getContainManager(), "tourManagerContent");
             manager.setActiveFunctionPanle(manager.getTourManagerContent());
+            manager.getTourManagerContent().reloadPanel();
         } else if (e.getSource() == manager.getManagerStafffunction()) {
             manager.getCardLayout().show(manager.getContainManager(), "staffManagerContent");
             manager.setActiveFunctionPanle(manager.getStaffManagerContent());
