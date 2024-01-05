@@ -21,16 +21,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class TourFormContent extends JPanel {
+public class TourDetailContent extends JPanel {
     private TourCategoryService tourCategoryService = new TourCategoryService();
     private TourVehicleService tourVehicleService = new TourVehicleService();
     private TourService tourService = new TourService();
     private Manager manager;
+    private Tour selectedTour;
     private PanelRound containMain;
     private JPanel containTitle;
     private JLabel lbIconTitle;
     private JLabel lbTitle;
-    private JButton btnIconReload;
     private PanelRound containFormTour;
     private PanelRound containImage;
     private JLabel lbBanner;
@@ -63,10 +63,11 @@ public class TourFormContent extends JPanel {
     private JFileChooser fcBanner;
     private File selectedBannerFile;
     private File selectedProgramFile;
-    private JButton btnAdd;
+    private JButton btnEdit;
+    private JButton btnDelete;
 
 
-    public TourFormContent(Manager manager) {
+    public TourDetailContent(Manager manager) {
         this.manager = manager;
         init();
     }
@@ -96,24 +97,37 @@ public class TourFormContent extends JPanel {
         lbIconTitle.setBounds(43, 17, 30, 30);
         containTitle.add(lbIconTitle);
 
-        lbTitle = new JLabel("Thêm tour");
+        lbTitle = new JLabel("Xem chi tiết tour");
         lbTitle.setFont(new Font("Roboto", Font.BOLD, 24));
         lbTitle.setBounds(93, 17, 225, 30);
         containTitle.add(lbTitle);
 
-        icon = ImageValidate.scaleAndCreateIcon("/image/reload.png", 30, 30);
-        btnIconReload = new JButton(icon);
-        btnIconReload.setBounds(1069, 17, 30, 30);
-        btnIconReload.setBorderPainted(false);
-        btnIconReload.setContentAreaFilled(false);
-        btnIconReload.setFocusPainted(false);
-        btnIconReload.addActionListener(new ActionListener() {
+        btnEdit = new JButton("Sửa");
+        btnEdit.setBounds(851, 12, 120, 40);
+        btnEdit.setBackground(new Color(97, 95, 220));
+        btnEdit.setFocusPainted(false);
+        btnEdit.setForeground(Color.WHITE);
+        btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                reloadPanel();
+                btnEditActionPerformed(e);
             }
         });
-        containTitle.add(btnIconReload);
+        containTitle.add(btnEdit);
+
+        btnDelete = new JButton("Xóa");
+        btnDelete.setBounds(991, 12, 120, 40);
+        btnDelete.setBackground(Color.WHITE);
+        btnDelete.setFocusPainted(false);
+        btnDelete.setForeground(new Color(212, 95, 91));
+        btnDelete.setBorder(new LineBorder(new Color(212, 95, 91), 2));
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnDeleteActionPerformed(e);
+            }
+        });
+        containTitle.add(btnDelete);
 
         containFormTour = new PanelRound();
         containFormTour.setRoundBottomLeft(20);
@@ -316,29 +330,12 @@ public class TourFormContent extends JPanel {
         });
         containFormTour.add(lbFileProgram);
 
-        btnIconReload.setBorderPainted(false);
-        btnIconReload.setContentAreaFilled(false);
-        btnIconReload.setFocusPainted(false);
-
-        btnAdd = new JButton("Xác nhận");
-        btnAdd.setBounds(405, 721, 120, 40);
-        btnAdd.setBackground(new Color(97, 95, 220));
-        btnAdd.setFocusPainted(false);
-        btnAdd.setForeground(Color.WHITE);
-        btnAdd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnAddActionPerformed(e);
-            }
-        });
-        containFormTour.add(btnAdd);
-
         btnClose = new JButton("Đóng");
-        btnClose.setBounds(550, 721, 120, 40);
-        btnClose.setBackground(new Color(241, 241, 249));
+        btnClose.setBounds(478, 721, 120, 40);
+        btnClose.setForeground(Color.WHITE);
+        btnClose.setBackground(new Color(97, 95, 220));
         btnClose.setFocusPainted(false);
-        btnClose.setForeground(new Color(128, 128, 227));
-        btnClose.setBorder(new LineBorder(new Color(128, 128, 227), 2));
+        btnClose.setBorder(null);
         btnClose.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -349,7 +346,48 @@ public class TourFormContent extends JPanel {
         containFormTour.add(btnClose);
     }
 
-    private void btnAddActionPerformed(ActionEvent e) {
+    private void btnDeleteActionPerformed(ActionEvent e) {
+        int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa tour này không?");
+        if (click == JOptionPane.YES_OPTION) {
+            int id = selectedTour.getId();
+            tourService.delete(id);
+            JOptionPane.showMessageDialog(null, "Xóa tour thành công.");
+            manager.changeForm("tourManagerContent");
+            manager.getTourManagerContent().reloadPanel();
+        }
+    }
+
+    public void getSelectedTour(Tour tour) {
+        reloadPanel();
+        selectedTour = tour;
+        Icon icon = ImageValidate.scaleAndCreateIconAbPath(tour.getImage(), 966, 318);
+        lbBanner.setIcon(icon);
+        tfTourName.setText(tour.getTour_name());
+        tfTourSche.setText(tour.getSchedule());
+        cbTourCate.setSelectedItem(tour.getTourCategory().getCategory_name());
+        selectedBannerFile = new File(tour.getImage());
+        lbFileName.setText(selectedBannerFile.getName());
+        tfTourStart.setText(tour.getStart_point());
+        tfTourPrice.setText(String.valueOf(tour.getPrice()));
+        selectedProgramFile = new File(tour.getTour_program());
+        List<Tour_Vehicle> tour_vehicleList = tourVehicleService.findAll();
+        for (Tour_Vehicle tourVehicle :
+                tour_vehicleList) {
+            if (tourVehicle.getTour_id() == tour.getId()) {
+                if (tourVehicle.getVehicle_id() == 1) {
+                    cbVehiclePlane.setSelected(true);
+                }
+                if (tourVehicle.getVehicle_id() == 2) {
+                    cbVehicleCar.setSelected(true);
+                }
+            }
+        }
+        String[] tour_time = tour.getTour_time().split("");
+        tfTourDayTime.setText(tour_time[0]);
+        tfTourNightTime.setText(tour_time[2]);
+    }
+
+    private void btnEditActionPerformed(ActionEvent e) {
         String tour_name = tfTourName.getText();
         String tour_sche = tfTourSche.getText();
         String tour_start = tfTourStart.getText();
@@ -357,7 +395,7 @@ public class TourFormContent extends JPanel {
         String daytime = tfTourDayTime.getText();
         String nighttime = tfTourNightTime.getText();
         String tour_cate = (String) cbTourCate.getSelectedItem();
-        String tour_image = lbFileName.getText();
+        String tour_image = selectedBannerFile.getAbsolutePath();
         if (tour_name.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập tên tour.");
         } else if (tour_sche.trim().isEmpty()) {
@@ -378,31 +416,64 @@ public class TourFormContent extends JPanel {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập giá tiền.");
         } else if (!InputRegex.inputNumber(tour_price)) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập định dạng số cho giá tiền.");
-        } else if (selectedProgramFile == null) {
+        } else if (!selectedProgramFile.exists()) {
             JOptionPane.showMessageDialog(null, "Vui lòng chọn chương tình tour.");
         } else {
-            String tour_time = daytime + "N" + nighttime + "Đ";
-            Tour_category tourCategory = tourCategoryService.findByName(tour_cate);
-            Tour tour = new Tour(tour_name, tour_time, tour_start, Integer.parseInt(tour_price), tour_sche, selectedProgramFile.getAbsolutePath(), selectedBannerFile.getAbsolutePath(), tourCategory);
-            tourService.add(tour);
-            List<Tour> tourList = tourService.findAll();
-            if (cbVehiclePlane.isSelected()) {
-                Tour_Vehicle tourVehicle = new Tour_Vehicle(tourList.get(tourList.size()-1).getId(), 1);
-                tourVehicleService.add(tourVehicle);
+            int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn cập nhật thông tin tour không?");
+            if (click == JOptionPane.YES_OPTION) {
+                selectedTour.setTour_name(tour_name);
+                selectedTour.setSchedule(tour_sche);
+                selectedTour.setStart_point(tour_start);
+                selectedTour.setPrice(Integer.parseInt(tour_price));
+                selectedTour.setImage(tour_image);
+                selectedTour.setTour_program(selectedProgramFile.getAbsolutePath());
+                String tour_time = daytime + "N" + nighttime + "Đ";
+                selectedTour.setTour_time(tour_time);
+                for (Tour_category tourCategory :
+                        tourCategoryService.findAll()) {
+                    if (tourCategory.getCategory_name().equals(tour_cate)) {
+                        selectedTour.setTourCategory(tourCategory);
+                    }
+                }
+                tourService.edit(selectedTour.getId(), selectedTour);
+
+                boolean planeSelected = cbVehiclePlane.isSelected();
+                boolean carSelected = cbVehicleCar.isSelected();
+                List<Tour_Vehicle> tourVehicles = tourVehicleService.findByTour_ID(selectedTour.getId());
+                if (tourVehicles.size() == 0) {
+                    if (planeSelected) {
+                        Tour_Vehicle newTourVehicle = new Tour_Vehicle(selectedTour.getId(), 1);
+                        tourVehicleService.add(newTourVehicle);
+                    }
+                    if (carSelected) {
+                        Tour_Vehicle newTourVehicle = new Tour_Vehicle(selectedTour.getId(), 2);
+                        tourVehicleService.add(newTourVehicle);
+                    }
+                } else {
+                    for (Tour_Vehicle t : tourVehicles) {
+                        if ((t.getVehicle_id() == 1 && !planeSelected) || (t.getVehicle_id() == 2 && !carSelected)) {
+                            tourVehicleService.delete(t.getId());
+                        }
+                        if (planeSelected && !tourVehicleService.findByTour_IDAndVehicle_ID(selectedTour.getId(), 1)) {
+                            Tour_Vehicle newTourVehicle = new Tour_Vehicle(selectedTour.getId(), 1);
+                            tourVehicleService.add(newTourVehicle);
+                        }
+                        if (carSelected && !tourVehicleService.findByTour_IDAndVehicle_ID(selectedTour.getId(), 2)) {
+                            Tour_Vehicle newTourVehicle = new Tour_Vehicle(selectedTour.getId(), 2);
+                            tourVehicleService.add(newTourVehicle);
+                        }
+                    }
+                }
+                JOptionPane.showMessageDialog(null, "Cập nhật dữ liệu thành công.");
+                manager.changeForm("tourManagerContent");
+                manager.getTourManagerContent().reloadPanel();
             }
-            if (cbVehicleCar.isSelected()) {
-                Tour_Vehicle tourVehicle = new Tour_Vehicle(tourList.get(tourList.size()-1).getId(), 2);
-                tourVehicleService.add(tourVehicle);
-            }
-            JOptionPane.showMessageDialog(null, "Thêm tour mới thành công!");
-            manager.changeForm("tourManagerContent");
-            manager.getTourManagerContent().reloadPanel();
         }
     }
 
     private void openFilePDFActionPerformed(ActionEvent e) {
         try {
-            if (selectedProgramFile != null && selectedProgramFile.exists()) {
+            if (selectedProgramFile.exists()) {
                 ProcessBuilder processBuilder;
                 if (System.getProperty("os.name").toLowerCase().contains("win")) {
                     processBuilder = new ProcessBuilder("cmd", "/c", "start", "\"\"", selectedProgramFile.getAbsolutePath());
@@ -411,10 +482,10 @@ public class TourFormContent extends JPanel {
                 }
                 processBuilder.start();
             } else {
-                JOptionPane.showMessageDialog(null, "Chưa chọn hoặc không tìm thấy file!");
+                JOptionPane.showMessageDialog(null, "Không tìm thấy file!");
             }
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi khi mở file!");
+            ex.printStackTrace();
         }
     }
 

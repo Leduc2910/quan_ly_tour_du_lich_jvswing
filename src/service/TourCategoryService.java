@@ -13,7 +13,15 @@ import java.util.List;
 public class TourCategoryService implements IService<Tour_category> {
 
     private Connection connection = ConnectToMySQL.getConnection();
-
+    public Tour_category findByName(String value) {
+        for (Tour_category c :
+                findAll()) {
+            if (c.getCategory_name().equals(value)) {
+                return c;
+            }
+        }
+        return null;
+    }
     @Override
     public Tour_category findByID(int id) {
         for (Tour_category c :

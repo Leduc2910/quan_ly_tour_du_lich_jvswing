@@ -1,8 +1,10 @@
 package GUI;
 
+import controller.CurrentSession;
 import controller.ManagerController;
 import javafx.scene.layout.Pane;
 import jdk.nashorn.internal.scripts.JO;
+import model.Role;
 import model.Tour;
 import model.Tour_category;
 import model.User;
@@ -238,10 +240,16 @@ public class TourManagerContent extends JPanel {
 
         btnDetailTour = new JButton("Xem chi tiết");
         btnDetailTour.setBounds(910, 215, 120, 40);
-        btnDetailTour.setBackground(new Color(241,241,249));
+        btnDetailTour.setBackground(new Color(241, 241, 249));
         btnDetailTour.setFocusPainted(false);
         btnDetailTour.setForeground(new Color(128, 128, 227));
-        btnDetailTour.setBorder(new LineBorder(new Color(128, 128, 227),2));
+        btnDetailTour.setBorder(new LineBorder(new Color(128, 128, 227), 2));
+        btnDetailTour.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnDetailTourActionPerformed(e);
+            }
+        });
         containInInfo.add(btnDetailTour);
 
         containOption = new PanelRound();
@@ -383,6 +391,18 @@ public class TourManagerContent extends JPanel {
                 tbListTourMouseClicked(e);
             }
         });
+    }
+
+    private void btnDetailTourActionPerformed(ActionEvent e) {
+        if (tbListTour.getSelectedRow() != -1 && !tfTourName.getText().equals("")) {
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tbListTour.getModel();
+            int id = (int) defaultTableModel.getValueAt(tbListTour.getSelectedRow(), 0);
+            Tour tour = tourService.findByID(id);
+            manager.changeForm("tourDetailContent");
+            manager.getTourDetailContent().getSelectedTour(tour);
+        } else {
+            JOptionPane.showMessageDialog(null, "Chọn một tour để xem chi tiết.");
+        }
     }
 
     private void btnAddTourActionPerformed(ActionEvent e) {

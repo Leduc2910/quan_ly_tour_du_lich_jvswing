@@ -10,7 +10,10 @@ public class Tour_Vehicle {
         this.tour_id = tour_id;
         this.vehicle_id = vehicle_id;
     }
-
+    public Tour_Vehicle( int tour_id, int vehicle_id) {
+        this.tour_id = tour_id;
+        this.vehicle_id = vehicle_id;
+    }
     public int getId() {
         return id;
     }

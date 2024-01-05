@@ -110,8 +110,8 @@ CREATE TABLE `tour_vehicle` (
   PRIMARY KEY (`id`),
   KEY `FK_TVehicleTour` (`tour_id`),
   KEY `FK_VehicleTVhe` (`vehicle_id`),
-  CONSTRAINT `FK_TVehicleTour` FOREIGN KEY (`tour_id`) REFERENCES `tour` (`id`),
-  CONSTRAINT `FK_VehicleTVhe` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`)
+  CONSTRAINT `FK_TVehicleTour` FOREIGN KEY (`tour_id`) REFERENCES `tour` (`id`) on update cascade on delete cascade ,
+  CONSTRAINT `FK_VehicleTVhe` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`) on update cascade on delete cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

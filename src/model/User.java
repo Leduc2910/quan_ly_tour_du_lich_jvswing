@@ -30,7 +30,7 @@ public class User {
         this.fullName = fullName;
         this.email = email;
         this.role = role;
-        this.image = "avatar-default.jpg";
+        this.image = "E:\\Code\\Java\\CNJAVA\\Quan_ly_tour_du_lich\\src\\image\\avatar-default.jpg";
     }
 
     public String getImage() {

@@ -35,11 +35,20 @@ public class Manager extends JFrame {
     private JLabel lbIconLog;
     private JPanel pnlFullName;
     private TourFormContent tourFormContent;
+    private TourDetailContent tourDetailContent;
 
 
     public Manager() {
         this.init();
         this.changeForm();
+    }
+
+    public TourDetailContent getTourDetailContent() {
+        return tourDetailContent;
+    }
+
+    public void setTourDetailContent(TourDetailContent tourDetailContent) {
+        this.tourDetailContent = tourDetailContent;
     }
 
     public TourFormContent getTourFormContent() {
@@ -158,8 +167,7 @@ public class Manager extends JFrame {
         containAvatar.setLayout(null);
         containMenuBar.add(containAvatar);
 
-        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
-        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
+        Icon icon = ImageValidate.makeRoundedImageIconAbPath(CurrentSession.getCurrentUser().getImage(), 200, 200, 200);
         lbAvatar = new JLabel(icon);
         lbAvatar.setBounds(70, 0, 200, 200);
         containAvatar.add(lbAvatar);
@@ -280,6 +288,9 @@ public class Manager extends JFrame {
 
         tourFormContent = new TourFormContent(this);
         containManager.add(tourFormContent, "tourFormContent");
+
+        tourDetailContent = new TourDetailContent(this);
+        containManager.add(tourDetailContent, "tourDetailContent");
     }
 
     private static Font getAdjustedFont(JLabel label, String text, Dimension maxSize) {
@@ -316,12 +327,14 @@ public class Manager extends JFrame {
     public void changeForm() {
         cardLayout = (CardLayout) (containManager.getLayout());
     }
+
     public void changeForm(String cardName) {
         cardLayout.show(containManager, cardName);
     }
+
     public void reloadCurrentUser() {
-        String path = "/image/" + CurrentSession.getCurrentUser().getImage();
-        Icon icon = ImageValidate.makeRoundedImageIcon(path, 200, 200, 200);
+        String path = CurrentSession.getCurrentUser().getImage();
+        Icon icon = ImageValidate.makeRoundedImageIconAbPath(path, 200, 200, 200);
         lbAvatar.setIcon(icon);
         lbFullName.setText(CurrentSession.getCurrentUser().getFullName());
         lbFullName.setFont(getAdjustedFont(lbFullName, CurrentSession.getCurrentUser().getFullName(), pnlFullName.getSize()));

@@ -24,6 +24,26 @@ public class TourVehicleService implements IService<Tour_Vehicle> {
         return null;
     }
 
+    public List<Tour_Vehicle> findByTour_ID(int tour_id) {
+        List<Tour_Vehicle> tourVehicles = new ArrayList<>();
+        for (Tour_Vehicle t : findAll()) {
+            if (t.getTour_id() == tour_id) {
+                tourVehicles.add(t);
+            }
+        }
+        return tourVehicles;
+    }
+
+    public boolean findByTour_IDAndVehicle_ID(int t_id, int v_id) {
+        List<Tour_Vehicle> tourVehicles = new ArrayList<>();
+        for (Tour_Vehicle t : findAll()) {
+            if (t.getTour_id() == t_id && t.getVehicle_id() == v_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void add(Tour_Vehicle tourVehicle) {
         String sql = "insert into tour_vehicle(vehicle_id, tour_id) values (?,?);";

@@ -270,10 +270,10 @@ public class AccountDetailContent extends JPanel {
 
         btnEditPass = new JButton("Đổi mật khẩu");
         btnEditPass.setBounds(542, 562, 120, 40);
-        btnEditPass.setBackground(new Color(241,241,249));
+        btnEditPass.setBackground(new Color(241, 241, 249));
         btnEditPass.setFocusPainted(false);
         btnEditPass.setForeground(new Color(128, 128, 227));
-        btnEditPass.setBorder(new LineBorder(new Color(128, 128, 227),2));
+        btnEditPass.setBorder(new LineBorder(new Color(128, 128, 227), 2));
         btnEditPass.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -399,13 +399,13 @@ public class AccountDetailContent extends JPanel {
 
     private void btnFCAvatarActionPerformed(ActionEvent e) {
         fcAvatar.setDialogTitle("Chọn ảnh đại diện");
-        fcAvatar.setCurrentDirectory(new File(".\\src\\image"));
-        fcAvatar.setFileFilter(new FileNameExtensionFilter("All pics", "png", "jpeg", "jpg"));
+        fcAvatar.setCurrentDirectory(new File("C:\\Users\\mihdu\\Pictures"));
+        fcAvatar.setFileFilter(new FileNameExtensionFilter("Pictures", "png", "jpeg", "jpg"));
         int res = fcAvatar.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
             selectedImgAvt = fcAvatar.getSelectedFile();
             lbFileName.setText(selectedImgAvt.getName());
-            Icon icon = ImageValidate.makeRoundedImageIcon("/image/" + selectedImgAvt.getName(), 307, 307, 10);
+            Icon icon = ImageValidate.makeRoundedImageIconAbPath(selectedImgAvt.getAbsolutePath(), 307, 307, 10);
             lbAvatar.setIcon(icon);
         }
     }
@@ -414,13 +414,13 @@ public class AccountDetailContent extends JPanel {
         String fullname = tfInFullName.getText(); //1
         String date = (jDCBirthday.getDate() != null) ? dateFormat.format(jDCBirthday.getDate()) : "";
         String phone = tfInPhone.getText();
-        String image = lbFileName.getText();
+        String image = selectedImgAvt.getAbsolutePath();
 
         if (fullname.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập họ tên.");
-        }  else if (phone.trim().isEmpty() || !InputRegex.isPhoneNumber(phone)) {
+        } else if (phone.trim().isEmpty() || !InputRegex.isPhoneNumber(phone)) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập số điện thoại (0 hoặc +84).");
-        } else if (date.isEmpty()) {
+        } else if (date.isEmpty() || !InputRegex.isBirthday(date)) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng ngày sinh.");
         } else {
             int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn chỉnh sửa không?");
@@ -470,10 +470,10 @@ public class AccountDetailContent extends JPanel {
         tfInRole.setText(user.getRole().getRole_name());
         tfInPhone.setText(user.getPhone());
         tfInEmail.setText(user.getEmail());
-        String path = "/image/" + user.getImage();
-        Icon icon = ImageValidate.makeRoundedImageIcon(path, 307, 307, 10);
+        Icon icon = ImageValidate.makeRoundedImageIconAbPath(user.getImage(), 307, 307, 10);
         lbAvatar.setIcon(icon);
-        lbFileName.setText(user.getImage());
+        selectedImgAvt = new File(user.getImage());
+        lbFileName.setText(selectedImgAvt.getName());
     }
 
     private void btnIconCloseActionPerformed(ActionEvent e) {

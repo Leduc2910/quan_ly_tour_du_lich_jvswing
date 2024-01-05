@@ -290,10 +290,10 @@ public class StaffManagerContent extends JPanel {
 
         btnDelete = new JButton("Xóa");
         btnDelete.setBounds(542, 280, 120, 40);
-        btnDelete.setBackground(new Color(241,241,249));
+        btnDelete.setBackground(new Color(241, 241, 249));
         btnDelete.setFocusPainted(false);
         btnDelete.setForeground(new Color(212, 95, 91));
-        btnDelete.setBorder(new LineBorder(new Color(212, 95, 91),2));
+        btnDelete.setBorder(new LineBorder(new Color(212, 95, 91), 2));
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -513,7 +513,7 @@ public class StaffManagerContent extends JPanel {
             String role_name = (String) cbInRole.getSelectedItem();
             String phone = tfInPhone.getText();
             String date = (jDCBirthday.getDate() != null) ? dateFormat.format(jDCBirthday.getDate()) : "";
-            String image = lbFileName.getText();
+            String image = selectedImgAvt.getAbsolutePath();
 
             if (fullname.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập họ tên.");
@@ -523,8 +523,8 @@ public class StaffManagerContent extends JPanel {
                 JOptionPane.showMessageDialog(null, "Vui lòng chọn giới tính.");
             } else if (phone.trim().isEmpty() || !InputRegex.isPhoneNumber(phone)) {
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập số điện thoại (0 hoặc +84).");
-            } else if (date.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày sinh.");
+            } else if (date.isEmpty() || !InputRegex.isBirthday(date)) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn đúng định dạng ngày sinh.");
             } else {
                 int click = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn chỉnh sửa không?");
                 if (click == JOptionPane.YES_OPTION) {
@@ -555,7 +555,7 @@ public class StaffManagerContent extends JPanel {
         if (res == JFileChooser.APPROVE_OPTION) {
             selectedImgAvt = fcAvatar.getSelectedFile();
             lbFileName.setText(selectedImgAvt.getName());
-            Icon icon = ImageValidate.makeRoundedImageIcon("/image/" + selectedImgAvt.getName(), 235, 235, 10);
+            Icon icon = ImageValidate.makeRoundedImageIconAbPath(selectedImgAvt.getAbsolutePath(), 235, 235, 10);
             lbAvatar.setIcon(icon);
         }
 
@@ -583,9 +583,9 @@ public class StaffManagerContent extends JPanel {
             }
         }
         tfInEmail.setText(selectedUser.getEmail());
-        lbFileName.setText(selectedUser.getImage());
-        String path = "/image/" + selectedUser.getImage();
-        Icon icon = ImageValidate.makeRoundedImageIcon(path, 235, 235, 10);
+        selectedImgAvt = new File(selectedUser.getImage());
+        lbFileName.setText(selectedImgAvt.getName());
+        Icon icon = ImageValidate.makeRoundedImageIconAbPath(selectedUser.getImage(), 235, 235, 10);
         lbAvatar.setIcon(icon);
 
     }

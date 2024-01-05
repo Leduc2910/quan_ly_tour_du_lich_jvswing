@@ -26,6 +26,23 @@ public class ImageValidate {
         return new ImageIcon(roundedImage);
     }
 
+    public static Icon scaleAndCreateIconAbPath(String path, int width, int height) {
+        ImageIcon imageIcon = new ImageIcon(path);
+        Image scaledImage = imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
+    }
 
+    public static Icon makeRoundedImageIconAbPath(String path, int width, int height, int cornerRadius) {
+        Icon image = scaleAndCreateIconAbPath(path, width, height);
+        BufferedImage roundedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = roundedImage.createGraphics();
+
+        RoundRectangle2D roundRect = new RoundRectangle2D.Float(0, 0, image.getIconWidth(), image.getIconHeight(), cornerRadius * 2, cornerRadius * 2);
+        g2.setClip(roundRect);
+        image.paintIcon(null, g2, 0, 0);
+        g2.dispose();
+
+        return new ImageIcon(roundedImage);
+    }
 
 }
