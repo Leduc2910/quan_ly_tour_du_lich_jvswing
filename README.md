@@ -22,4 +22,8 @@ Phần mềm hỗ trợ việc quản lý thông tin cá nhân, tour du lịch v
 - **Cơ sở dữ liệu**: SQL Workbench
 - **Mô hình phát triển**: MVC (Model - View - Controller)
 
-
+## 👥 Danh sách tài khoản demo
+| Vai trò     | Tài khoản                 | Mật khẩu  |
+|-------------|---------------------------|-----------|
+| Quản lý     | mihduc                    | 1    |
+| Nhân viên   | justTuanB                 | 1    |
